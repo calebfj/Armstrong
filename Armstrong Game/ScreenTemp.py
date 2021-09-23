@@ -4,24 +4,33 @@ from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DIS
 from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
 
+
 root = tk.Tk()
+
+
+
 # global centerMessage
 def choice1():
     message = "You chose Choice 1!"
     centerTextBox.config(text=message)
     # messagebox.showinfo( "Choice 1", "You choose Choice 1!")
+    choice1.config(text="Test")
+
 
 def choice2():
     message = "You chose Choice 2!"
     centerTextBox.config(text=message)
 
+
 def choice3():
     message = "You chose Choice 3!"
     centerTextBox.config(text=message)
 
+
 def choice4():
     message = "You chose Choice 4!"
     centerTextBox.config(text=message)
+
 
 canvas = tk.Canvas(root, height=700, width=700, bg="white")
 canvas.pack()
@@ -50,14 +59,12 @@ centerMessage = '''
 
 centerTextBox = Label(
     root,
-    height = 100,
-    width = 100,
-    padx = 30,
-    pady = 10,
+    height=100,
+    width=100,
+    padx=30,
+    pady=10,
     text=centerMessage
 )
-
-
 
 # centerTextBox.
 centerTextBox.place(relwidth=0.8, relheight=0.5, relx=0.0959, rely=0.095)
@@ -66,16 +73,26 @@ centerTextBox.place(relwidth=0.8, relheight=0.5, relx=0.0959, rely=0.095)
 
 # centerTextBox.config(state='disabled')
 
-choice4 = tk.Button(root, text="Choice 4", state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870", command=choice4)
-choice4.place(relx=0.25, rely=0.88)
+choice1msg = "Look for medical items in order to patch up the injured squad."
+choice1 = tk.Button(root, text=choice1msg, state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870",
+                    command=choice1)
+choice1.place(relx=0.25, rely=0.67)
 
-choice3 = tk.Button(root, text="Choice 3", state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870", command=choice3)
-choice3.place(relx=0.25, rely=0.81)
-
-choice2 = tk.Button(root, text="Choice 2", state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870", command=choice2)
+choice2msg = "Look for food for yourself - you're famished."
+choice2 = tk.Button(root, text=choice2msg, state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870",
+                    command=choice2)
 choice2.place(relx=0.25, rely=0.74)
 
-choice1 = tk.Button(root, text="Choice 1", state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870", command=choice1)
-choice1.place(relx=0.25, rely=0.67)
+choice3msg = "You ignore the cabinets and keep walking."
+choice3 = tk.Button(root, text=choice3msg, state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870",
+                    command=choice3)
+choice3.place(relx=0.25, rely=0.81)
+
+choice4msg = "This situation is too bleak - make a run for it."
+choice4 = tk.Button(root, text=choice4msg, state=ACTIVE, width=50, padx=5, pady=5, fg="white", bg="#406870",
+                    command=choice4)
+choice4.place(relx=0.25, rely=0.88)
+
+
 
 root.mainloop()
