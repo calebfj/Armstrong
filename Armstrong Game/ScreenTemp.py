@@ -35,35 +35,35 @@ def main():
             "This situation is too bleak - make a run for it."  # death
         ),
         GameState(  #gamestate 1
-            "You go back to your squad.",
+            "You go back to your squad. You see a strange room, a chest, and a mysterious red button on the wall.",
 
-            "One of Armstrongs teammates finds an escape map in a random corner.",
-            "You find the normal map yourself in a random cabinet",
-            "You look into an old dusty room where you find nothing and end up stepping on a rusty nail.",
-            "You found a random red button on the wall next to a map... Push it?"  # death
+            "You have your team search around.",
+            "Open the chest",
+            "Explore the room.",  # choice 3
+            "Push the mysterious button."  # death
         ),
         GameState(  #gamestate 2
             "You're now passing the enemy's basecamp. What will you do?",
 
-            "You find a solider's barracks and steal disguises for your team",  # button 1
-            "Find dynamite on the side of an armory.",  # button 2
-            "You dont know whats in there so you avoid it entirely.",   # button 3
-            "You see a guard out front of the basecamp, maybe try to convince him to help you out?"  # death
+            "Using a map, you find a soldier's barracks and steal disguises for your team",  # button 1
+            "Check out the armory.",  # button 2
+            "You don't know what's in there so you avoid it entirely.",   # button 3
+            "Try to convince a guard to help you out."  # death
         ),
         GameState(  #gamestate 3
             "You're now at the enemy checkpoint to leave the battlefield. What do you want to do?",     # button 1
 
             "Your squad puts on disguises and enters the checkpoint office to see if there is anything useful there.",  #button 2
-            "Lets not risk anything and keep moving!",
-            "You try to throw a rock at the guards to distract them, but it ricochets back at you and you take damage. ",   #button 3
+            "Let's not risk anything and keep moving!",
+            "You try to throw a rock at the guards to distract them. ",   #button 3
             "You see a break in the crowd at the checkpoint. Run for it!"  # death
         ),
         GameState(  #gamestate 4
-            "Following the maps or through mere luck you run into what seems to be an escape hatch.",
+            "You encounter a maze.",
 
-            "If you have the key and the escape map you can succesfully escape.",
-            "Use the dynamite to blow the hatch. You might escape but it's only a matter of time before they find you.",
-            "You don't have anything, so you get captured by the enemy once you reach the hatch and do not escape.",
+            "Using the map and the key, try to escape!",
+            "Use the dynamite to blow through the maze.",
+            "Try to make it through the maze blind.",
             ""
         ),
         GameState(  # finale
@@ -114,12 +114,20 @@ def main():
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
 
-        if gameStateNum == 4 and not PlayerValues.hasDynamite():
+        if gameStateNum == 4:
+            if not PlayerValues.hasKey():
+                choice1Button.config(state=DISABLED)
+            if not PlayerValues.hasDynamite():
+                choice2Button.config(state=DISABLED)
+
+        if gameStateNum == 3 and not PlayerValues.hasDisguises():
+            choice1Button.config(state=DISABLED)
+
+        if gameStateNum == 2 and (not PlayerValues.hasNormalMap() and not PlayerValues.hasEscapeMap()):
             choice2Button.config(state=DISABLED)
 
-        if gameStateNum == 1 and not PlayerValues.hasBandages() and not PlayerValues.hasFood():
-                # team was too weak to move. you're alone.
-            return
+        if gameStateNum == 1 and not PlayerValues.hasBandages():
+            choice1Button.config(state=DISABLED)
 
 
 
@@ -133,11 +141,27 @@ def main():
         # messagebox.showinfo( "Choice 1", "You choose Choice 1!")
         # choice1.config(text="Test")
         global gameStateNum
+        global consequence
 
         if gameStateNum == 0:
-            global consequence
             consequence = "You find bandages."
             PlayerValues.unlockBandages()
+
+        if gameStateNum == 1:
+            consequence = "One of Armstrongs teammates finds an escape map!"
+            PlayerValues.unlockEscapeMap()
+
+        if gameStateNum == 2:
+            consequence = "You find some clothes you might be able to use as disguises."
+            PlayerValues.unlockDisguises()
+
+        if gameStateNum == 3:
+            consequence = """You find a key labeled "Emergency Escape Hatch"."""
+            PlayerValues.unlockKey()
+
+        if gameStateNum == 4:
+            consequence = "You successfully escape!"
+
 
         gameStateNum += 1
 
@@ -151,12 +175,27 @@ def main():
         # message = "You chose Choice 2!"
         # centerTextBox.config(text=message)
         global gameStateNum
+        global consequence
 
         if gameStateNum == 0:
-            global consequence
             consequence = "You find some food for your squad. You eat your portion. +1 HP"
             PlayerValues.unlockFood()
             PlayerValues.changeHealth(1)
+
+        if gameStateNum == 1:
+            consequence = "You find a normal map."
+            PlayerValues.unlockNormalMap()
+
+        if gameStateNum == 2:       # requires escape map OR normal map
+            consequence = "You find dynamite!"
+            PlayerValues.unlockDynamite()
+
+        if gameStateNum == 3:
+            consequence = "Nothing happens - you keep moving."
+
+        if gameStateNum == 4:
+            consequence = "You escape with minor injuries but it's only a matter of time before they find you. -1 HP"
+            PlayerValues.changeHealth(-1)
 
 
         # if gameStateNum == 2:
@@ -172,13 +211,27 @@ def main():
         # message = "You chose Choice 3!"
         # centerTextBox.config(text=message)
         global gameStateNum
+        global consequence
 
         if gameStateNum == 0:
-            global consequence
             consequence = "You trip on a wire and are injured by a trap. -1 HP"
             PlayerValues.changeHealth(-1)
 
+        if gameStateNum == 1:
+            consequence = "You find nothing and step on a rusty nail. -1 HP"
+            PlayerValues.changeHealth(-1)
 
+        if gameStateNum == 2:
+            consequence = "You step on a rusty nail. -1 HP"
+            PlayerValues.changeHealth(-1)
+
+        if gameStateNum == 3:
+            consequence = "It ricochets back at you. -1 HP"
+            PlayerValues.changeHealth(-1)
+
+        if gameStateNum == 4:
+            consequence = "You cannot unlock the escape hatch, so get captured by the enemy."
+            PlayerValues.die()
 
         gameStateNum += 1
         updateGameValues()
@@ -187,10 +240,19 @@ def main():
         # message = "You chose Choice 4!"
         # centerTextBox.config(text=message)
         global gameStateNum
+        global consequence
 
         if gameStateNum == 0:
-            global consequence
-            consequence = "You get hit by a motar round and die."
+            consequence = "You get hit by a motar round. Your bits fly everywhere."
+
+        if gameStateNum == 1:
+            consequence = "A self destruct sequences starts and the building blows up. Oof."
+
+        if gameStateNum == 2:
+            consequence = "Your convincing skills were subpar. You got captured."
+
+        if gameStateNum == 3:
+            consequence = "A grandma beats you to death for cutting in front of her in line."
 
         gameStateNum += 1
 
@@ -239,7 +301,7 @@ def main():
             width=10,
             padx=5,
             pady=5,
-            text="Result"
+            text=""
         )
 
         # centerTextBox.

@@ -5,6 +5,10 @@ class PlayerValues:
         self.__hasDynamite = False
         self.__hasBandages = False
         self.__hasFood = False
+        self.__hasNormalMap = False
+        self.__hasEscapeMap = False
+        self.__hasDisguises = False
+        self.__hasKey = False
         self.__health = 4
 
     def hasDynamite(self):
@@ -24,6 +28,30 @@ class PlayerValues:
 
     def unlockFood(self):
         self.__hasFood = True
+
+    def hasNormalMap(self):
+        return self.__hasNormalMap
+
+    def unlockNormalMap(self):
+        self.__hasNormalMap = True
+
+    def hasEscapeMap(self):
+        return self.__hasEscapeMap
+
+    def unlockEscapeMap(self):
+        self.__hasEscapeMap = True
+
+    def hasDisguises(self):
+        return self.__hasDisguises
+
+    def unlockDisguises(self):
+        self.__hasDisguises = True
+
+    def hasKey(self):
+        return self.__hasKey
+
+    def unlockKey(self):
+        self.__hasKey = True
 
     def changeHealth(self, value):
         self.__health += value
