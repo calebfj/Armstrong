@@ -78,10 +78,7 @@ def main():
             "",
             ""
         )
-
     ]
-
-    print(gameStateList[0].getMessage())
 
     # myList = [GameState("hi")]
 
