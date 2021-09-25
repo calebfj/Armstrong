@@ -11,6 +11,8 @@ global consequence
 global collectiblesList
 consequence = ""
 gameStateNum = 0
+
+global PlayerValues
 PlayerValues = PlayerValues()
 
 
@@ -139,6 +141,12 @@ def main():
 
         collectibles.config(text=collectiblesList)
 
+        if gameStateNum == 5:
+            choice2Button.config(state=DISABLED)
+            choice3Button.config(state=DISABLED)
+            choice4Button.config(state=DISABLED)
+
+
         if gameStateNum == 4:
             if not PlayerValues.hasKey():
                 choice1Button.config(state=DISABLED)
@@ -154,6 +162,11 @@ def main():
         if gameStateNum == 1 and not PlayerValues.hasBandages():
             choice1Button.config(state=DISABLED)
 
+        if gameStateNum == 0:
+            choice1Button.config(state=ACTIVE)
+            choice2Button.config(state=ACTIVE)
+            choice3Button.config(state=ACTIVE)
+            choice4Button.config(state=ACTIVE)
 
 
 
@@ -167,6 +180,7 @@ def main():
         # choice1.config(text="Test")
         global gameStateNum
         global consequence
+        global PlayerValues
 
         if gameStateNum == 0:
             consequence = "You find bandages."
@@ -186,6 +200,17 @@ def main():
 
         if gameStateNum == 4:
             consequence = "You successfully escape!"
+
+        if gameStateNum == 5:
+            global collectiblesList
+            collectiblesList = "Collectibles: "
+
+            PlayerValues.reset()
+
+            consequence = ""
+            gameStateNum = -1
+
+
 
 
         gameStateNum += 1

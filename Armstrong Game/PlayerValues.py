@@ -11,6 +11,16 @@ class PlayerValues:
         self.__hasKey = False
         self.__health = 4
 
+    def reset(self):
+        self.__hasDynamite = False
+        self.__hasBandages = False
+        self.__hasFood = False
+        self.__hasNormalMap = False
+        self.__hasEscapeMap = False
+        self.__hasDisguises = False
+        self.__hasKey = False
+        self.__health = 4
+
     def hasDynamite(self):
         return self.__hasDynamite
 
