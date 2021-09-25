@@ -8,6 +8,7 @@ from PlayerValues import PlayerValues
 
 global gameStateNum
 global consequence
+global collectiblesList
 consequence = ""
 gameStateNum = 0
 PlayerValues = PlayerValues()
@@ -110,6 +111,33 @@ def main():
         choice4Button.config(text=deathChoice)
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
+
+        global collectiblesList
+
+        collectiblesList = "Collectibles:"
+
+        if PlayerValues.hasBandages():
+            collectiblesList += "\nBandages"
+
+        if PlayerValues.hasDynamite():
+            collectiblesList += "\nDynamite"
+
+        if PlayerValues.hasFood():
+            collectiblesList += "\nFood"
+
+        if PlayerValues.hasNormalMap():
+            collectiblesList += "\nNormal Map"
+
+        if PlayerValues.hasEscapeMap():
+            collectiblesList += "\nEscape Map"
+
+        if PlayerValues.hasDisguises():
+            collectiblesList += "\nDisguises"
+
+        if PlayerValues.hasKey():
+            collectiblesList += "\nKey"
+
+        collectibles.config(text=collectiblesList)
 
         if gameStateNum == 4:
             if not PlayerValues.hasKey():
@@ -302,7 +330,7 @@ def main():
         )
 
         # centerTextBox.
-        result.place(relwidth=0.8, relheight=0.05, relx=0.5, rely=0.2, anchor=CENTER)
+        result.place(relwidth=0.7, relheight=0.05, relx=0.5, rely=0.2, anchor=CENTER)
 
         health = Label(
             root,
@@ -315,6 +343,19 @@ def main():
 
         # centerTextBox.
         health.place(relwidth=0.1, relheight=0.05, relx=0.1, rely=0.1)
+
+        global collectiblesList
+        collectiblesList = "Collectibles: "
+
+        collectibles = Label(
+            root,
+            text=collectiblesList,
+            justify=LEFT,
+            anchor='n'
+        )
+
+        # centerTextBox.
+        collectibles.place(relwidth=0.1, relheight=0.12, relx=0.1, rely=0.475)
 
         buttonWidth = 80
 
