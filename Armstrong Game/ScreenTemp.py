@@ -339,10 +339,6 @@ def main():
                             command=choice4)
         choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
 
-    if gameStateNum != 0:
-        centerTextBox.config(text="lol")
-        print("why")
-
     root.mainloop()
 
 
