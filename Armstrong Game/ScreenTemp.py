@@ -89,7 +89,7 @@ def main():
     def updateGameValues():
         if PlayerValues.isDead():
             message = "You died."
-            firstChoice = ""
+            firstChoice = "Restart"
             secondChoice = ""
             thirdChoice = ""
             deathChoice = ""
@@ -141,32 +141,36 @@ def main():
 
         collectibles.config(text=collectiblesList)
 
-        if gameStateNum == 5:
+        if gameStateNum == 5 or PlayerValues.isDead():
+            choice1Button.config(state=ACTIVE)
             choice2Button.config(state=DISABLED)
             choice3Button.config(state=DISABLED)
             choice4Button.config(state=DISABLED)
 
 
-        if gameStateNum == 4:
+        elif gameStateNum == 4:
             if not PlayerValues.hasKey():
                 choice1Button.config(state=DISABLED)
             if not PlayerValues.hasDynamite():
                 choice2Button.config(state=DISABLED)
 
-        if gameStateNum == 3 and not PlayerValues.hasDisguises():
+        elif gameStateNum == 3 and not PlayerValues.hasDisguises():
             choice1Button.config(state=DISABLED)
 
-        if gameStateNum == 2 and (not PlayerValues.hasNormalMap() and not PlayerValues.hasEscapeMap()):
+        elif gameStateNum == 2 and (not PlayerValues.hasNormalMap() and not PlayerValues.hasEscapeMap()):
             choice2Button.config(state=DISABLED)
 
-        if gameStateNum == 1 and not PlayerValues.hasBandages():
+        elif gameStateNum == 1 and not PlayerValues.hasBandages():
             choice1Button.config(state=DISABLED)
 
-        if gameStateNum == 0:
+        elif gameStateNum == 0:
             choice1Button.config(state=ACTIVE)
             choice2Button.config(state=ACTIVE)
             choice3Button.config(state=ACTIVE)
             choice4Button.config(state=ACTIVE)
+
+        else:
+            choice1Button.config(state=ACTIVE)
 
 
 
@@ -181,6 +185,16 @@ def main():
         global gameStateNum
         global consequence
         global PlayerValues
+
+        if PlayerValues.isDead():
+            # global collectiblesList
+            # collectiblesList = "Collectibles: "
+
+            PlayerValues.reset()
+
+            consequence = ""
+            gameStateNum = -1
+
 
         if gameStateNum == 0:
             consequence = "You find bandages."
