@@ -11,6 +11,7 @@ global consequence
 global collectiblesList
 consequence = ""
 gameStateNum = 0
+#hey there :)
 
 global PlayerValues
 PlayerValues = PlayerValues()
