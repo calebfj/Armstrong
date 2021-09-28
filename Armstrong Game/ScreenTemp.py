@@ -123,14 +123,14 @@ def main():
         if PlayerValues.hasBandages():
             collectiblesList += "🩹"
 
-        if PlayerValues.hasDynamite():
-            collectiblesList += "🧨"
-
         if PlayerValues.hasFood():
             collectiblesList += "🍞"
 
         if PlayerValues.hasNormalMap():
             collectiblesList += "🗺"
+
+        if PlayerValues.hasDynamite():
+            collectiblesList += "🧨"
 
         if PlayerValues.hasEscapeMap():
             collectiblesList += "🏃🗺‍"
@@ -160,6 +160,7 @@ def main():
             choice1Button.config(state=DISABLED)
 
         elif gameStateNum == 2 and (not PlayerValues.hasNormalMap() and not PlayerValues.hasEscapeMap()):
+            choice1Button.config(state=DISABLED)
             choice2Button.config(state=DISABLED)
 
         elif gameStateNum == 1 and not PlayerValues.hasBandages():
