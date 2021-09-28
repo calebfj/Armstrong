@@ -118,7 +118,7 @@ def main():
 
         global collectiblesList
 
-        collectiblesList = "Collectibles:\n"
+        collectiblesList = "Collectibles: \n"
 
         if PlayerValues.hasBandages():
             collectiblesList += "🩹"
@@ -387,7 +387,7 @@ def main():
         health.place(relwidth=0.1, relheight=0.05, relx=0.1, rely=0.1)
 
         global collectiblesList
-        collectiblesList = "Collectibles: "
+        collectiblesList = "Collectibles: \n"
 
         collectibles = Label(
             root,
@@ -397,7 +397,7 @@ def main():
         )
 
         # centerTextBox.
-        collectibles.place(relwidth=0.1, relheight=0.12, relx=0.1, rely=0.475)
+        collectibles.place(relwidth=0.1, relheight=0.0751, relx=0.1, rely=0.519)
 
         buttonWidth = 80
 
