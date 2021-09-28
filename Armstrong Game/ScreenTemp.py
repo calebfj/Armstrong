@@ -117,28 +117,28 @@ def main():
 
         global collectiblesList
 
-        collectiblesList = "Collectibles:"
+        collectiblesList = "Collectibles:\n"
 
         if PlayerValues.hasBandages():
-            collectiblesList += "\n🩹"
+            collectiblesList += "🩹"
 
         if PlayerValues.hasDynamite():
-            collectiblesList += "\n🧨"
+            collectiblesList += "🧨"
 
         if PlayerValues.hasFood():
-            collectiblesList += "\n🍞"
+            collectiblesList += "🍞"
 
         if PlayerValues.hasNormalMap():
-            collectiblesList += "\n🗺"
+            collectiblesList += "🗺"
 
         if PlayerValues.hasEscapeMap():
-            collectiblesList += "\nEscape Map"
+            collectiblesList += "🏃🗺‍"
 
         if PlayerValues.hasDisguises():
-            collectiblesList += "\nDisguises"
+            collectiblesList += "👔"
 
         if PlayerValues.hasKey():
-            collectiblesList += "\nKey"
+            collectiblesList += "\n🗝"
 
         collectibles.config(text=collectiblesList)
 
