@@ -138,7 +138,7 @@ def main():
             collectiblesList += "👔"
 
         if PlayerValues.hasKey():
-            collectiblesList += "\n🗝"
+            collectiblesList += "🗝"
 
         collectibles.config(text=collectiblesList)
 
