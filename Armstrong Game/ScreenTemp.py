@@ -15,10 +15,10 @@ gameStateNum = 0
 global PlayerValues
 PlayerValues = PlayerValues()
 
-
 def main():
     root = tk.Tk()
-
+    root.geometry("1920x1080")
+    root.tk.call('tk', 'scaling', 2.0)
     # gameState1 = GameState(
     #     "You're on the battlefield, soldier. What do you do next?",
     #
@@ -85,6 +85,7 @@ def main():
 
     # myList = [GameState("hi")]
 
+
     # global centerMessage
     def updateGameValues():
         if PlayerValues.isDead():
@@ -119,16 +120,16 @@ def main():
         collectiblesList = "Collectibles:"
 
         if PlayerValues.hasBandages():
-            collectiblesList += "\nBandages"
+            collectiblesList += "\n🩹"
 
         if PlayerValues.hasDynamite():
-            collectiblesList += "\nDynamite"
+            collectiblesList += "\n🧨"
 
         if PlayerValues.hasFood():
-            collectiblesList += "\nFood"
+            collectiblesList += "\n🍞"
 
         if PlayerValues.hasNormalMap():
-            collectiblesList += "\nNormal Map"
+            collectiblesList += "\n🗺"
 
         if PlayerValues.hasEscapeMap():
             collectiblesList += "\nEscape Map"
@@ -374,7 +375,7 @@ def main():
         health = Label(
             root,
             height=10,
-            width=10,
+            width=20,
             padx=5,
             pady=5,
             text="Health: " + str(PlayerValues.getHealth())
