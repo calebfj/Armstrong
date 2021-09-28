@@ -9,7 +9,8 @@ class PlayerValues:
         self.__hasEscapeMap = False
         self.__hasDisguises = False
         self.__hasKey = False
-        self.__health = 4
+        self.__health = "♥♥♥♥"
+        self.__healthValue = 4
 
     def reset(self):
         self.__hasDynamite = False
@@ -19,7 +20,8 @@ class PlayerValues:
         self.__hasEscapeMap = False
         self.__hasDisguises = False
         self.__hasKey = False
-        self.__health = 4
+        self.__health = "♥♥♥♥"
+        self.__healthValue = 4
 
     def hasDynamite(self):
         return self.__hasDynamite
@@ -64,18 +66,20 @@ class PlayerValues:
         self.__hasKey = True
 
     def changeHealth(self, value):
-        self.__health += value
+        self.__healthValue += value
+        if value < 0:
+            self.__health = self.__health[:len(self.__health) + value]
+        else:
+            self.__health += "♥"
+
 
     def getHealth(self):
         return self.__health
 
     def die(self):
-        self.__health = 0
+        self.__healthValue = 0
+        self.__health = ""
 
     def isDead(self):
-        if self.__health == 0:
+        if self.__healthValue == 0:
             return True
-
-
-
-
