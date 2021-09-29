@@ -85,6 +85,9 @@ class PlayerValues:
     def setEndTime(self, float):
         self.__endTime = float - self.__startTime
 
+    def getStartTime(self):
+        return self.__startTime
+
     def getHealth(self):
         return self.__health
 

@@ -90,9 +90,9 @@ def main():
 
     def tick():
         if (gameStateNum == 5 or PlayerValues.isDead()):
-            print("Run Over")
+            runningClock.after(225, tick)
         else:
-            TimeCheck = abs(StartTime - time.time())
+            TimeCheck = abs(PlayerValues.getStartTime() - time.time())
             MinuteTime = 0
             SecondTime = TimeCheck
 
@@ -459,10 +459,9 @@ def main():
         choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
 
         #Temp until we can forward it to LCD
-        runningClock = Label(root, font=("times", 20, "bold"), bg="#406870")
-        runningClock.place(relx=0.322, rely=0.01)
+        runningClock = Label(root, font=("times", 10, "bold"), bg="#406870")
+        runningClock.place(relx=0.4, rely=0.01)
 
-    StartTime = time.time()
     tick()
     root.mainloop()
 
