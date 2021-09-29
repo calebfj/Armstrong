@@ -1,3 +1,5 @@
+from PlayerValues import PlayerValues
+
 class GameState:
     def __init__(self, message, choice1, choice2, choice3, choiceDeath):
         self.__choiceDeath = choiceDeath
@@ -20,3 +22,4 @@ class GameState:
 
     def getChoiceDeath(self):
         return self.__choiceDeath
+

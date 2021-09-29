@@ -1,3 +1,6 @@
+import time
+
+
 class PlayerValues:
     # __hasDynamite = False
 
@@ -11,6 +14,8 @@ class PlayerValues:
         self.__hasKey = False
         self.__health = "♥♥♥♥"
         self.__healthValue = 4
+        self.__endTime = 0
+        self.__startTime = time.time()
 
     def reset(self):
         self.__hasDynamite = False
@@ -22,6 +27,8 @@ class PlayerValues:
         self.__hasKey = False
         self.__health = "♥♥♥♥"
         self.__healthValue = 4
+        self.__endTime = 0
+        self.__startTime = time.time()
 
     def hasDynamite(self):
         return self.__hasDynamite
@@ -72,6 +79,11 @@ class PlayerValues:
         else:
             self.__health += "♥"
 
+    def getEndTime(self):
+        return self.__endTime
+
+    def setEndTime(self, float):
+        self.__endTime = float - self.__startTime
 
     def getHealth(self):
         return self.__health

@@ -5,6 +5,7 @@ from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
 from GameState import GameState
 from PlayerValues import PlayerValues
+import time
 
 global gameStateNum
 global consequence
@@ -13,9 +14,11 @@ consequence = ""
 gameStateNum = 0
 
 global PlayerValues
+global StartTime
 PlayerValues = PlayerValues()
 
 def main():
+    StartTime = time.time()
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
@@ -89,20 +92,48 @@ def main():
     # global centerMessage
     def updateGameValues():
         if PlayerValues.isDead():
-            message = "You died."
+            PlayerValues.setEndTime(time.time())
+
+            GameTime = PlayerValues.getEndTime()
+            MinuteTime = 0
+            SecondTime = GameTime
+
+            if GameTime >= 60:
+                MinuteTime = GameTime % 60
+                SecondTime = ((MinuteTime * 60) - GameTime)
+
+            message = "You died." + f"\nGame Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
             firstChoice = "Restart"
             secondChoice = ""
             thirdChoice = ""
             deathChoice = ""
 
         else:
-            gameState = gameStateList[gameStateNum]
+            if gameStateNum == 5:
+                PlayerValues.setEndTime(time.time())
 
-            message = gameState.getMessage()
-            firstChoice = gameState.getChoice1()
-            secondChoice = gameState.getChoice2()
-            thirdChoice = gameState.getChoice3()
-            deathChoice = gameState.getChoiceDeath()
+                gameState = gameStateList[5]
+                GameTime = PlayerValues.getEndTime()
+                MinuteTime = 0
+                SecondTime = GameTime
+
+                if GameTime >= 60:
+                    MinuteTime = GameTime%60
+                    SecondTime = ((MinuteTime*60) - GameTime)
+
+                message = gameState.getMessage() + f"\nGame Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+                firstChoice = gameState.getChoice1()
+                secondChoice = gameState.getChoice2()
+                thirdChoice = gameState.getChoice3()
+                deathChoice = gameState.getChoiceDeath()
+            else:
+                gameState = gameStateList[gameStateNum]
+
+                message = gameState.getMessage()
+                firstChoice = gameState.getChoice1()
+                secondChoice = gameState.getChoice2()
+                thirdChoice = gameState.getChoice3()
+                deathChoice = gameState.getChoiceDeath()
 
 
         result.config(text=consequence)
@@ -224,9 +255,6 @@ def main():
 
             consequence = ""
             gameStateNum = -1
-
-
-
 
         gameStateNum += 1
 
