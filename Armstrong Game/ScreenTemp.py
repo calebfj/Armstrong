@@ -88,6 +88,19 @@ def main():
 
     # myList = [GameState("hi")]
 
+    def tick():
+        if (gameStateNum == 5 or PlayerValues.isDead()):
+            print("Run Over")
+        else:
+            TimeCheck = abs(StartTime - time.time())
+            MinuteTime = 0
+            SecondTime = TimeCheck
+
+            if TimeCheck >= 60:
+                MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
+
+            runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds")
+            runningClock.after(225, tick)
 
     # global centerMessage
     def updateGameValues():
@@ -99,10 +112,9 @@ def main():
             SecondTime = GameTime
 
             if GameTime >= 60:
-                MinuteTime = GameTime % 60
-                SecondTime = ((MinuteTime * 60) - GameTime)
+                MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-            message = "You died." + f"\nGame Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+            message = "You died." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
             firstChoice = "Restart"
             secondChoice = ""
             thirdChoice = ""
@@ -118,10 +130,9 @@ def main():
                 SecondTime = GameTime
 
                 if GameTime >= 60:
-                    MinuteTime = GameTime%60
-                    SecondTime = ((MinuteTime*60) - GameTime)
+                    MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-                message = gameState.getMessage() + f"\nGame Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+                message = gameState.getMessage() + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
                 firstChoice = gameState.getChoice1()
                 secondChoice = gameState.getChoice2()
                 thirdChoice = gameState.getChoice3()
@@ -432,7 +443,6 @@ def main():
                             command=choice1)
         choice1Button.place(relx=0.5, rely=0.69, anchor=CENTER)
 
-
         choice2msg = gameStateList[0].getChoice2()
         choice2Button = tk.Button(root, text=choice2msg, state=ACTIVE, width=buttonWidth, padx=5, pady=5, fg="white", bg="#406870",
                             command=choice2)
@@ -448,6 +458,12 @@ def main():
                             command=choice4)
         choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
 
+        #Temp until we can forward it to LCD
+        runningClock = Label(root, font=("times", 20, "bold"), bg="#406870")
+        runningClock.place(relx=0.322, rely=0.01)
+
+    StartTime = time.time()
+    tick()
     root.mainloop()
 
 
