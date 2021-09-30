@@ -200,7 +200,7 @@ def main():
         elif gameStateNum == 3 and not PlayerValues.hasDisguises():
             choice1Button.config(state=DISABLED)
 
-        elif gameStateNum == 2 and (not PlayerValues.hasNormalMap() and not PlayerValues.hasEscapeMap()):
+        elif gameStateNum == 2 and (not PlayerValues.hasNormalMap() and (not PlayerValues.hasEscapeMap() or not PlayerValues.hasBandages())):
             choice1Button.config(state=DISABLED)
             choice2Button.config(state=DISABLED)
 
