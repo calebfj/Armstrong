@@ -174,7 +174,7 @@ def main():
             collectiblesList += "🧨"
 
         if PlayerValues.hasEscapeMap():
-            collectiblesList += "🏃🗺‍"
+            collectiblesList += "🏃‍"
 
         if PlayerValues.hasDisguises():
             collectiblesList += "👔"
