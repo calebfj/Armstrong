@@ -1,3 +1,4 @@
+import random
 from tkinter import *
 import tkinter as tk
 from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DISABLED
@@ -105,6 +106,8 @@ def main():
 
     # global centerMessage
     def updateGameValues():
+        randomize_choices()
+
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
 
@@ -368,6 +371,7 @@ def main():
     textFrame = tk.Frame(root, bg="#263D42")
     textFrame.place(relwidth=0.85, relheight=0.56, relx=0.0735, rely=0.07)
 
+
     # set the message
 
     # centerTextBox.insert('end', centerMessage)
@@ -375,6 +379,14 @@ def main():
     # centerTextBox.config(state='disabled')
 
     # gameState is 0
+
+    def randomize_choices():
+        random.shuffle(posy_choices)
+
+        choice1Button.place_configure(rely=posy_choices[0])
+        choice2Button.place_configure(rely=posy_choices[1])
+        choice3Button.place_configure(rely=posy_choices[2])
+        choice4Button.place_configure(rely=posy_choices[3])
 
     if gameStateNum == 0:
         centerMessage = gameStateList[0].getMessage()
@@ -430,6 +442,10 @@ def main():
 
         buttonWidth = 80
 
+        posy_choices = [0.69, 0.76, 0.83, 0.90]
+        random.shuffle(posy_choices)
+        # print(posy_choices[1])
+
         choice1msg = gameStateList[0].getChoice1()
         choice1Button = tk.Button(root,
                                   text=choice1msg,
@@ -439,7 +455,7 @@ def main():
                                   fg="black",
                                   bg="#f0f0f0",
                                   command=choice1)
-        choice1Button.place(relx=0.5, rely=0.69, anchor=CENTER)
+        choice1Button.place(relx=0.5, rely=posy_choices[0], anchor=CENTER)
 
         choice2msg = gameStateList[0].getChoice2()
         choice2Button = tk.Button(root,
@@ -450,7 +466,7 @@ def main():
                                   fg="black",
                                   bg="#f0f0f0",
                                   command=choice2)
-        choice2Button.place(relx=0.5, rely=0.76, anchor=CENTER)
+        choice2Button.place(relx=0.5, rely=posy_choices[1], anchor=CENTER)
 
         choice3msg = gameStateList[0].getChoice3()
         choice3Button = tk.Button(root,
@@ -461,7 +477,7 @@ def main():
                                   fg="black",
                                   bg="#f0f0f0",
                                   command=choice3)
-        choice3Button.place(relx=0.5, rely=0.83, anchor=CENTER)
+        choice3Button.place(relx=0.5, rely=posy_choices[2], anchor=CENTER)
 
         choice4msg = gameStateList[0].getChoiceDeath()
         choice4Button = tk.Button(root,
@@ -472,7 +488,7 @@ def main():
                                   fg="black",
                                   bg="#f0f0f0",
                                   command=choice4)
-        choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
+        choice4Button.place(relx=0.5, rely=posy_choices[3], anchor=CENTER)
 
         #Temp until we can forward it to LCD
         runningClock = Label(root,
