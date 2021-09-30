@@ -115,7 +115,7 @@ def main():
             if GameTime >= 60:
                 MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-            message = "You died." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+            message = "You Goofed." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
             firstChoice = "Restart"
             secondChoice = ""
             thirdChoice = ""
@@ -200,9 +200,11 @@ def main():
         elif gameStateNum == 3 and not PlayerValues.hasDisguises():
             choice1Button.config(state=DISABLED)
 
-        elif gameStateNum == 2 and (not PlayerValues.hasNormalMap() and (not PlayerValues.hasEscapeMap() or not PlayerValues.hasBandages())):
-            choice1Button.config(state=DISABLED)
-            choice2Button.config(state=DISABLED)
+        elif gameStateNum == 2:
+            if not (PlayerValues.hasBandages() and PlayerValues.hasEscapeMap()):
+                choice1Button.config(state=DISABLED)
+            if not (PlayerValues.hasNormalMap() or PlayerValues.hasEscapeMap()):
+                choice2Button.config(state=DISABLED)
 
         elif gameStateNum == 1 and not PlayerValues.hasBandages():
             choice1Button.config(state=DISABLED)
