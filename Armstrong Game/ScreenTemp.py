@@ -5,6 +5,7 @@ from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
 from GameState import GameState
 from PlayerValues import PlayerValues
+import time
 
 global gameStateNum
 global consequence
@@ -88,23 +89,63 @@ def main():
 
     # myList = [GameState("hi")]
 
+    def tick():
+        if gameStateNum == 5 or PlayerValues.isDead():
+            runningClock.after(225, tick)
+        else:
+            TimeCheck = abs(PlayerValues.getStartTime() - time.time())
+            MinuteTime = 0
+            SecondTime = TimeCheck
+
+            if TimeCheck >= 60:
+                MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
+
+            runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
+            runningClock.after(225, tick)
+
     # global centerMessage
     def updateGameValues():
         if PlayerValues.isDead():
-            message = "You died."
+            PlayerValues.setEndTime(time.time())
+
+            GameTime = PlayerValues.getEndTime()
+            MinuteTime = 0
+            SecondTime = GameTime
+
+            if GameTime >= 60:
+                MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
+
+            message = "You died." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
             firstChoice = "Restart"
             secondChoice = ""
             thirdChoice = ""
             deathChoice = ""
 
         else:
-            gameState = gameStateList[gameStateNum]
+            if gameStateNum == 5:
+                PlayerValues.setEndTime(time.time())
 
-            message = gameState.getMessage()
-            firstChoice = gameState.getChoice1()
-            secondChoice = gameState.getChoice2()
-            thirdChoice = gameState.getChoice3()
-            deathChoice = gameState.getChoiceDeath()
+                gameState = gameStateList[5]
+                GameTime = PlayerValues.getEndTime()
+                MinuteTime = 0
+                SecondTime = GameTime
+
+                if GameTime >= 60:
+                    MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
+
+                message = gameState.getMessage() + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+                firstChoice = gameState.getChoice1()
+                secondChoice = gameState.getChoice2()
+                thirdChoice = gameState.getChoice3()
+                deathChoice = gameState.getChoiceDeath()
+            else:
+                gameState = gameStateList[gameStateNum]
+
+                message = gameState.getMessage()
+                firstChoice = gameState.getChoice1()
+                secondChoice = gameState.getChoice2()
+                thirdChoice = gameState.getChoice3()
+                deathChoice = gameState.getChoiceDeath()
 
         result.config(text=consequence)
 
@@ -313,7 +354,7 @@ def main():
 
         updateGameValues()
 
-    canvas = tk.Canvas(root, height=700, width=700, bg="white")
+    canvas = tk.Canvas(root, height=700, width=700, bg="#f0f0f0")
     canvas.pack()
 
     frame = tk.Frame(root, bg="#263D42")
@@ -431,6 +472,11 @@ def main():
                                   command=choice4)
         choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
 
+        #Temp until we can forward it to LCD
+        runningClock = Label(root, font=("times", 10, "bold"), bg="#406870")
+        runningClock.place(relx=0.4, rely=0.01)
+
+    tick()
     root.mainloop()
 
 
