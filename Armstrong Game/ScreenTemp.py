@@ -310,23 +310,23 @@ def main():
         global consequence
 
         if gameStateNum == 0:
-            consequence = "You trip on a wire and are injured by a trap. -1 HP"
+            consequence = "You trip on a wire and you are injured by a trap in the wall. 'ITS A TRAP! AAGH' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 1:
-            consequence = "You find nothing and step on a rusty nail. -1 HP"
+            consequence = "You find nothing and step on a rusty nail. 'WHO LEAVES A RUSTY NAIL THERE?' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 2:
-            consequence = "You step on a rusty nail. -1 HP"
+            consequence = "You step on a rusty nail AGAIN. 'WHO LEAVES TWO RUSTY NAILS ON THE GROUND??' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 3:
-            consequence = "It ricochets back at you. -1 HP"
+            consequence = "It ricochets back at you. 'ROCK LEE WHY HAVE YOU FORSAKEN ME' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 4:
-            consequence = "You cannot unlock the escape hatch, so get captured by the enemy."
+            consequence = "You cannot unlock the escape hatch, oh no the enemy sees you. Enjoy prison!"
             PlayerValues.die()
 
         gameStateNum += 1
@@ -475,7 +475,9 @@ def main():
         choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
 
         #Temp until we can forward it to LCD
-        runningClock = Label(root, font=("times", 10, "bold"), bg="#406870")
+        runningClock = Label(root,
+                             font=("times", 10, "bold"),
+                             bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
 
     tick()
