@@ -89,7 +89,7 @@ def main():
     # myList = [GameState("hi")]
 
     def tick():
-        if (gameStateNum == 5 or PlayerValues.isDead()):
+        if gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
             TimeCheck = abs(PlayerValues.getStartTime() - time.time())
@@ -99,7 +99,7 @@ def main():
             if TimeCheck >= 60:
                 MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
-            runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds")
+            runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
             runningClock.after(225, tick)
 
     # global centerMessage
@@ -364,7 +364,7 @@ def main():
 
         updateGameValues()
 
-    canvas = tk.Canvas(root, height=700, width=700, bg="white")
+    canvas = tk.Canvas(root, height=700, width=700, bg="#f0f0f0")
     canvas.pack()
 
     frame = tk.Frame(root, bg="#263D42")
