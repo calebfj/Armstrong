@@ -420,6 +420,12 @@ def main():
         choice3Button.place_configure(rely=posy_choices[2])
         choice4Button.place_configure(rely=posy_choices[3])
 
+    # def keyup(e):
+    #     pause()
+
+    def keydown(e):
+        pause()
+
     if gameStateNum == 0:
         centerMessage = gameStateList[0].getMessage()
 
@@ -538,8 +544,17 @@ def main():
                              font=("times", 10, "bold"),
                              bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
+        
+
 
     tick()
+    # root.mainloop()
+
+    frame = Frame(root, width=0, height=0)
+    frame.bind("<p>", keydown)
+    # frame.bind("<KeyRelease>", keyup)
+    frame.pack()
+    frame.focus_set()
     root.mainloop()
 
 
