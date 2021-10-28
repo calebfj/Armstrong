@@ -8,7 +8,11 @@ from GameState import GameState
 from PlayerValues import PlayerValues
 import time
 global paused
+global pausedTime
+global TimeCheck
+TimeCheck = 0
 paused = False
+pausedTime = 0
 global gameStateNum
 global consequence
 global collectiblesList
@@ -97,15 +101,12 @@ def main():
         if gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
-            # pausedTime = 0
+            global pausedTime
             # if paused:
-            #     pausedTime = PlayerValues.getStartTime - time.Time()
-            # else:
-            #     pausedTime = 0
-
-
-
-            TimeCheck = abs(PlayerValues.getStartTime() - time.time())
+            if not paused:
+                global TimeCheck
+                TimeCheck = abs(PlayerValues.getStartTime() - time.time() + pausedTime)
+                
             MinuteTime = 0
             SecondTime = TimeCheck
 
@@ -285,6 +286,8 @@ def main():
 
     def pause():
         global paused
+        global pausedTime
+        
 
         if paused == False:
             choice1Button.config(state=DISABLED)
@@ -292,12 +295,14 @@ def main():
             choice3Button.config(state=DISABLED)
             choice4Button.config(state=DISABLED)
             paused = True
+            pausedTime -= time.time()
         else:
             choice1Button.config(state=ACTIVE)
             choice2Button.config(state=ACTIVE)
             choice3Button.config(state=ACTIVE)
             choice4Button.config(state=ACTIVE)
             paused = False
+            pausedTime += time.time()
 
     def choice2():
         # message = "You chose Choice 2!"
