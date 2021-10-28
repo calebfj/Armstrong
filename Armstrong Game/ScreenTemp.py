@@ -1,3 +1,4 @@
+import random
 from tkinter import *
 import tkinter as tk
 from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DISABLED
@@ -6,16 +7,23 @@ from tkinter.ttk import Frame, Button, Style
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
+<<<<<<< HEAD
 
+=======
+global paused
+paused = False
+>>>>>>> Matthew_2
 global gameStateNum
 global consequence
 global collectiblesList
 consequence = ""
 gameStateNum = 0
+# hey there :)
 
 global PlayerValues
 global StartTime
 PlayerValues = PlayerValues()
+
 
 def main():
     StartTime = time.time()
@@ -33,14 +41,17 @@ def main():
 
     gameStateList = [
         GameState(  #gamestate 0
+        GameState(  # gamestate 0
             "You're on the battlefield, soldier. What do you do next?",
 
             "Look for medical items in order to patch up the injured squad.",
             "Look for food for yourself - you're famished.",
             "You ignore the cabinets and keep walking.",    # result: you step on a wire -1 hp
+            "You ignore the cabinets and keep walking.",  # result: you step on a wire -1 hp
             "This situation is too bleak - make a run for it."  # death
         ),
         GameState(  #gamestate 1
+        GameState(  # gamestate 1
             "You go back to your squad. You see a strange room, a chest, and a mysterious red button on the wall.",
 
             "You have your team search around.",
@@ -49,22 +60,28 @@ def main():
             "Push the mysterious button."  # death
         ),
         GameState(  #gamestate 2
+        GameState(  # gamestate 2
             "You're now passing the enemy's basecamp. What will you do?",
 
             "Using a map, you find a soldier's barracks and steal disguises for your team",  # button 1
             "Check out the armory.",  # button 2
             "You don't know what's in there so you avoid it entirely.",   # button 3
+            "You don't know what's in there so you avoid it entirely.",  # button 3
             "Try to convince a guard to help you out."  # death
         ),
         GameState(  #gamestate 3
             "You're now at the enemy checkpoint to leave the battlefield. What do you want to do?",     # button 1
+        GameState(  # gamestate 3
+            "You're now at the enemy checkpoint to leave the battlefield. What do you want to do?",  # button 1
 
             "Your squad puts on disguises and enters the checkpoint office to see if there is anything useful there.",  #button 2
             "Let's not risk anything and keep moving!",
             "You try to throw a rock at the guards to distract them. ",   #button 3
+            "You try to throw a rock at the guards to distract them. ",  # button 3
             "You see a break in the crowd at the checkpoint. Run for it!"  # death
         ),
         GameState(  #gamestate 4
+        GameState(  # gamestate 4
             "You encounter a maze.",
 
             "Using the map and the key, try to escape!",
@@ -104,6 +121,8 @@ def main():
 
     # global centerMessage
     def updateGameValues():
+        randomize_choices()
+
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
 
@@ -114,7 +133,11 @@ def main():
             if GameTime >= 60:
                 MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
+<<<<<<< HEAD
             message = "You died." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+=======
+            message = "You Goofed." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+>>>>>>> Matthew_2
             firstChoice = "Restart"
             secondChoice = ""
             thirdChoice = ""
@@ -145,7 +168,10 @@ def main():
                 secondChoice = gameState.getChoice2()
                 thirdChoice = gameState.getChoice3()
                 deathChoice = gameState.getChoiceDeath()
+<<<<<<< HEAD
 
+=======
+>>>>>>> Matthew_2
 
         result.config(text=consequence)
 
@@ -160,27 +186,37 @@ def main():
         global collectiblesList
 
         collectiblesList = "Collectibles:"
+        collectiblesList = "Collectibles: \n"
 
         if PlayerValues.hasBandages():
             collectiblesList += "\n🩹"
 
         if PlayerValues.hasDynamite():
             collectiblesList += "\n🧨"
+            collectiblesList += "🩹"
 
         if PlayerValues.hasFood():
             collectiblesList += "\n🍞"
+            collectiblesList += "🍞"
 
         if PlayerValues.hasNormalMap():
             collectiblesList += "\n🗺"
+            collectiblesList += "🗺"
+
+        if PlayerValues.hasDynamite():
+            collectiblesList += "🧨"
 
         if PlayerValues.hasEscapeMap():
             collectiblesList += "\nEscape Map"
+            collectiblesList += "🏃‍"
 
         if PlayerValues.hasDisguises():
             collectiblesList += "\nDisguises"
+            collectiblesList += "👔"
 
         if PlayerValues.hasKey():
             collectiblesList += "\nKey"
+            collectiblesList += "🗝"
 
         collectibles.config(text=collectiblesList)
 
@@ -202,6 +238,11 @@ def main():
 
         elif gameStateNum == 2 and (not PlayerValues.hasNormalMap() and not PlayerValues.hasEscapeMap()):
             choice2Button.config(state=DISABLED)
+        elif gameStateNum == 2:
+            if not (PlayerValues.hasBandages() and PlayerValues.hasEscapeMap()):
+                choice1Button.config(state=DISABLED)
+            if not (PlayerValues.hasNormalMap() or PlayerValues.hasEscapeMap()):
+                choice2Button.config(state=DISABLED)
 
         elif gameStateNum == 1 and not PlayerValues.hasBandages():
             choice1Button.config(state=DISABLED)
@@ -238,7 +279,6 @@ def main():
             consequence = ""
             gameStateNum = -1
 
-
         if gameStateNum == 0:
             consequence = "You find bandages."
             PlayerValues.unlockBandages()
@@ -271,9 +311,23 @@ def main():
 
         updateGameValues()
 
+    def pause():
+        global paused
 
 
 
+        if paused == False:
+            choice1Button.config(state=DISABLED)
+            choice2Button.config(state=DISABLED)
+            choice3Button.config(state=DISABLED)
+            choice4Button.config(state=DISABLED)
+            paused = True
+        else:
+            choice1Button.config(state=ACTIVE)
+            choice2Button.config(state=ACTIVE)
+            choice3Button.config(state=ACTIVE)
+            choice4Button.config(state=ACTIVE)
+            paused = False
 
     def choice2():
         # message = "You chose Choice 2!"
@@ -291,6 +345,7 @@ def main():
             PlayerValues.unlockNormalMap()
 
         if gameStateNum == 2:       # requires escape map OR normal map
+        if gameStateNum == 2:  # requires escape map OR normal map
             consequence = "You find dynamite!"
             PlayerValues.unlockDynamite()
 
@@ -319,22 +374,27 @@ def main():
 
         if gameStateNum == 0:
             consequence = "You trip on a wire and are injured by a trap. -1 HP"
+            consequence = "You trip on a wire and you are injured by a trap in the wall. 'ITS A TRAP! AAGH' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 1:
             consequence = "You find nothing and step on a rusty nail. -1 HP"
+            consequence = "You find nothing and step on a rusty nail. 'WHO LEAVES A RUSTY NAIL THERE?' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 2:
             consequence = "You step on a rusty nail. -1 HP"
+            consequence = "You step on a rusty nail AGAIN. 'WHO LEAVES TWO RUSTY NAILS ON THE GROUND??' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 3:
             consequence = "It ricochets back at you. -1 HP"
+            consequence = "It ricochets back at you. 'ROCK LEE WHY HAVE YOU FORSAKEN ME' -1 HP"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 4:
             consequence = "You cannot unlock the escape hatch, so get captured by the enemy."
+            consequence = "You cannot unlock the escape hatch, oh no the enemy sees you. Enjoy prison!"
             PlayerValues.die()
 
         gameStateNum += 1
@@ -376,6 +436,7 @@ def main():
     textFrame = tk.Frame(root, bg="#263D42")
     textFrame.place(relwidth=0.85, relheight=0.56, relx=0.0735, rely=0.07)
 
+
     # set the message
 
     # centerTextBox.insert('end', centerMessage)
@@ -383,6 +444,14 @@ def main():
     # centerTextBox.config(state='disabled')
 
     # gameState is 0
+
+    def randomize_choices():
+        random.shuffle(posy_choices)
+
+        choice1Button.place_configure(rely=posy_choices[0])
+        choice2Button.place_configure(rely=posy_choices[1])
+        choice3Button.place_configure(rely=posy_choices[2])
+        choice4Button.place_configure(rely=posy_choices[3])
 
     if gameStateNum == 0:
         centerMessage = gameStateList[0].getMessage()
@@ -425,6 +494,7 @@ def main():
 
         global collectiblesList
         collectiblesList = "Collectibles: "
+        collectiblesList = "Collectibles: \n"
 
         collectibles = Label(
             root,
@@ -435,6 +505,7 @@ def main():
 
         # centerTextBox.
         collectibles.place(relwidth=0.1, relheight=0.12, relx=0.1, rely=0.475)
+        collectibles.place(relwidth=0.1, relheight=0.076, relx=0.1, rely=0.51)
 
         buttonWidth = 80
 
@@ -442,28 +513,91 @@ def main():
         choice1Button = tk.Button(root, text=choice1msg, state=ACTIVE, width=buttonWidth, padx=5, pady=5, fg="white", bg="#406870",
                             command=choice1)
         choice1Button.place(relx=0.5, rely=0.69, anchor=CENTER)
+        posy_choices = [0.69, 0.76, 0.83, 0.90]
+        random.shuffle(posy_choices)
+        # print(posy_choices[1])
 
+<<<<<<< HEAD
+=======
+        choice1msg = gameStateList[0].getChoice1()
+        choice1Button = tk.Button(root,
+                                  text=choice1msg,
+                                  state=ACTIVE,
+                                  width=buttonWidth,
+                                  padx=5, pady=5,
+                                  fg="black",
+                                  bg="#f0f0f0",
+                                  command=choice1)
+        choice1Button.place(relx=0.5, rely=posy_choices[0], anchor=CENTER)
+
+>>>>>>> Matthew_2
         choice2msg = gameStateList[0].getChoice2()
         choice2Button = tk.Button(root, text=choice2msg, state=ACTIVE, width=buttonWidth, padx=5, pady=5, fg="white", bg="#406870",
                             command=choice2)
         choice2Button.place(relx=0.5, rely=0.76, anchor=CENTER)
+        choice2Button = tk.Button(root,
+                                  text=choice2msg,
+                                  state=ACTIVE,
+                                  width=buttonWidth,
+                                  padx=5, pady=5,
+                                  fg="black",
+                                  bg="#f0f0f0",
+                                  command=choice2)
+        choice2Button.place(relx=0.5, rely=posy_choices[1], anchor=CENTER)
 
         choice3msg = gameStateList[0].getChoice3()
         choice3Button = tk.Button(root, text=choice3msg, state=ACTIVE, width=buttonWidth, padx=5, pady=5, fg="white", bg="#406870",
                             command=choice3)
         choice3Button.place(relx=0.5, rely=0.83, anchor=CENTER)
+        choice3Button = tk.Button(root,
+                                  text=choice3msg,
+                                  state=ACTIVE,
+                                  width=buttonWidth,
+                                  padx=5, pady=5,
+                                  fg="black",
+                                  bg="#f0f0f0",
+                                  command=choice3)
+        choice3Button.place(relx=0.5, rely=posy_choices[2], anchor=CENTER)
 
         choice4msg = gameStateList[0].getChoiceDeath()
+<<<<<<< HEAD
         choice4Button = tk.Button(root, text=choice4msg, state=ACTIVE, width=buttonWidth, padx=5, pady=5, fg="white", bg="#406870",
                             command=choice4)
         choice4Button.place(relx=0.5, rely=0.90, anchor=CENTER)
 
         #Temp until we can forward it to LCD
         runningClock = Label(root, font=("times", 10, "bold"), bg="#406870")
+=======
+        choice4Button = tk.Button(root,
+                                  text=choice4msg,
+                                  state=ACTIVE,
+                                  width=buttonWidth,
+                                  padx=5, pady=5,
+                                  fg="black",
+                                  bg="#f0f0f0",
+                                  command=choice4)
+        choice4Button.place(relx=0.5, rely=posy_choices[3], anchor=CENTER)
+
+        pauseButton = tk.Button(root,
+                                  text="Pause",
+                                  state=ACTIVE,
+                                  width=int(5),
+                                  padx=5, pady=5,
+                                  fg="black",
+                                  bg="#f0f0f0",
+                                  command=pause)
+        pauseButton.place(relx=0.878, rely=0.12, anchor=CENTER)
+
+        #Temp until we can forward it to LCD
+        runningClock = Label(root,
+                             font=("times", 10, "bold"),
+                             bg="#406870")
+>>>>>>> Matthew_2
         runningClock.place(relx=0.4, rely=0.01)
 
     tick()
     root.mainloop()
+
 
 
 main()
