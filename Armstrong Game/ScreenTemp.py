@@ -4,6 +4,8 @@ import tkinter as tk
 from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DISABLED
 from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
+import keyboard
+from gpiozero import LEDBoard, LED, ButtonBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
@@ -18,11 +20,14 @@ gameStateNum = 0
 global PlayerValues
 PlayerValues = PlayerValues()
 
+ListOfLED = LEDBoard(23, 25, 13, 26)
+ListOfButtons = ButtonBoard(17, 22, 27, 24, 16)
 
 def main():
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
+
     # gameState1 = GameState(
     #     "You're on the battlefield, soldier. What do you do next?",
     #
@@ -221,7 +226,7 @@ def main():
         else:
             choice1Button.config(state=ACTIVE)
 
-    def choice1():
+    def choice1(event):
         # print("why")
         # message = "You chose Choice 1!"
         # centerTextBox.config(text=message)
@@ -272,7 +277,7 @@ def main():
 
         updateGameValues()
 
-    def choice2():
+    def choice2(event):
         # message = "You chose Choice 2!"
         # centerTextBox.config(text=message)
         global gameStateNum
@@ -306,7 +311,7 @@ def main():
 
         # what did you find
 
-    def choice3():
+    def choice3(event):
         # message = "You chose Choice 3!"
         # centerTextBox.config(text=message)
         global gameStateNum
@@ -335,7 +340,7 @@ def main():
         gameStateNum += 1
         updateGameValues()
 
-    def choice4():
+    def choice4(event):
         # message = "You chose Choice 4!"
         # centerTextBox.config(text=message)
         global gameStateNum
@@ -497,6 +502,13 @@ def main():
         runningClock.place(relx=0.4, rely=0.01)
 
     tick()
+
+    root.bind(ListOfButtons.is_pressed(0), choice1)
+    root.bind(ListOfButtons.is_pressed(1), choice2)
+    root.bind(ListOfButtons.is_pressed(2), choice3)
+    root.bind(ListOfButtons.is_pressed(3), choice4)
+    root.bind(ListOfButtons.is_pressed(4), quit)
+
     root.mainloop()
 
 
