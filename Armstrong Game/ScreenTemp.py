@@ -5,7 +5,7 @@ from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DIS
 from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
 import keyboard
-from gpiozero import LEDBoard, LED, ButtonBoard
+from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
@@ -20,10 +20,24 @@ gameStateNum = 0
 global PlayerValues
 PlayerValues = PlayerValues()
 
-ListOfLED = LEDBoard(23, 25, 13, 26)
-ListOfButtons = ButtonBoard(17, 22, 27, 24, 16)
+YellowButton = Button(17)
+RedButton = Button(22)
+GreenButton = Button(27)
+BlueButton = Button(24)
+SmallButton = Button(16)
+
+BlueOne = LED(23)
+BlueTwo = LED(25)
+BlueThree = LED(13)
+BlueFour = LED(26)
+
+ListLED = LEDBoard(23, 25, 13, 26)
+
+global amountOfCollect
 
 def main():
+    amountOfCollect = 0
+
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
@@ -171,24 +185,31 @@ def main():
 
         if PlayerValues.hasBandages():
             collectiblesList += "🩹"
+            ListLED.on(0)
 
         if PlayerValues.hasFood():
             collectiblesList += "🍞"
+            ListLED.on(0)
 
         if PlayerValues.hasNormalMap():
             collectiblesList += "🗺"
+            ListLED.on(1)
 
         if PlayerValues.hasDynamite():
             collectiblesList += "🧨"
+            ListLED.on(2)
 
         if PlayerValues.hasEscapeMap():
             collectiblesList += "🏃‍"
+            ListLED.on(1)
 
         if PlayerValues.hasDisguises():
             collectiblesList += "👔"
+            ListLED.on(2)
 
         if PlayerValues.hasKey():
             collectiblesList += "🗝"
+            ListLED.on(3)
 
         collectibles.config(text=collectiblesList)
 
@@ -503,11 +524,7 @@ def main():
 
     tick()
 
-    root.bind(ListOfButtons.is_pressed(0), choice1)
-    root.bind(ListOfButtons.is_pressed(1), choice2)
-    root.bind(ListOfButtons.is_pressed(2), choice3)
-    root.bind(ListOfButtons.is_pressed(3), choice4)
-    root.bind(ListOfButtons.is_pressed(4), quit)
+    # root.bind(ListOfButtons.is_pressed(0), choice1)
 
     root.mainloop()
 
