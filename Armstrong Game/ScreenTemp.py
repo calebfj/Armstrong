@@ -9,6 +9,7 @@ from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
+from pynput.keyboard import Key, Controller
 
 global gameStateNum
 global consequence
@@ -41,6 +42,8 @@ def main():
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
+
+    keyboard = Controller()
 
     # gameState1 = GameState(
     #     "You're on the battlefield, soldier. What do you do next?",
@@ -526,6 +529,11 @@ def main():
 
     tick()
 
+
+    if YellowButton.is_active:
+        keyboard.press("a")
+
+    keyboard.press("a")
     # root.bind(ListOfButtons.is_pressed(0), choice1)
 
     root.mainloop()
