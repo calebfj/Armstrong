@@ -121,6 +121,7 @@ def main():
         randomize_choices()
 
         if PlayerValues.isDead():
+            pausedTime = 0
             PlayerValues.setEndTime(time.time())
 
             GameTime = PlayerValues.getEndTime()
