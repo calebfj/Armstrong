@@ -7,7 +7,8 @@ from tkinter.ttk import Frame, Button, Style
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
-
+global paused
+paused = False
 global gameStateNum
 global consequence
 global collectiblesList
@@ -272,6 +273,22 @@ def main():
 
         updateGameValues()
 
+    def pause():
+        global paused
+
+        if paused == False:
+            choice1Button.config(state=DISABLED)
+            choice2Button.config(state=DISABLED)
+            choice3Button.config(state=DISABLED)
+            choice4Button.config(state=DISABLED)
+            paused = True
+        else:
+            choice1Button.config(state=ACTIVE)
+            choice2Button.config(state=ACTIVE)
+            choice3Button.config(state=ACTIVE)
+            choice4Button.config(state=ACTIVE)
+            paused = False
+
     def choice2():
         # message = "You chose Choice 2!"
         # centerTextBox.config(text=message)
@@ -497,7 +514,7 @@ def main():
                                   padx=5, pady=5,
                                   fg="black",
                                   bg="#f0f0f0",
-                                  command=None)
+                                  command=pause)
         pauseButton.place(relx=0.878, rely=0.12, anchor=CENTER)
 
         #Temp until we can forward it to LCD
@@ -508,6 +525,7 @@ def main():
 
     tick()
     root.mainloop()
+
 
 
 main()
