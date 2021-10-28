@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DISABLED
 from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
-import keyboard
+
 from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
@@ -26,10 +26,10 @@ GreenButton = Button(27)
 BlueButton = Button(24)
 SmallButton = Button(16)
 
-BlueOne = LED(23)
-BlueTwo = LED(25)
-BlueThree = LED(13)
-BlueFour = LED(26)
+# BlueOne = LED(23)
+# BlueTwo = LED(25)
+# BlueThree = LED(13)
+# BlueFour = LED(26)
 
 ListLED = LEDBoard(23, 25, 13, 26)
 
@@ -128,6 +128,7 @@ def main():
         randomize_choices()
 
         if PlayerValues.isDead():
+            ListLED.off()
             PlayerValues.setEndTime(time.time())
 
             GameTime = PlayerValues.getEndTime()
@@ -145,6 +146,7 @@ def main():
 
         else:
             if gameStateNum == 5:
+                ListLED.off()
                 PlayerValues.setEndTime(time.time())
 
                 gameState = gameStateList[5]
@@ -247,7 +249,7 @@ def main():
         else:
             choice1Button.config(state=ACTIVE)
 
-    def choice1(event):
+    def choice1():
         # print("why")
         # message = "You chose Choice 1!"
         # centerTextBox.config(text=message)
@@ -298,7 +300,7 @@ def main():
 
         updateGameValues()
 
-    def choice2(event):
+    def choice2():
         # message = "You chose Choice 2!"
         # centerTextBox.config(text=message)
         global gameStateNum
@@ -332,7 +334,7 @@ def main():
 
         # what did you find
 
-    def choice3(event):
+    def choice3():
         # message = "You chose Choice 3!"
         # centerTextBox.config(text=message)
         global gameStateNum
@@ -361,7 +363,7 @@ def main():
         gameStateNum += 1
         updateGameValues()
 
-    def choice4(event):
+    def choice4():
         # message = "You chose Choice 4!"
         # centerTextBox.config(text=message)
         global gameStateNum
