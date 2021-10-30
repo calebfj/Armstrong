@@ -107,7 +107,7 @@ def main():
 
     # global centerMessage
     def updateGameValues():
-        randomize_choices()
+        
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
@@ -158,6 +158,8 @@ def main():
         choice2Button.config(text=secondChoice)
         choice3Button.config(text=thirdChoice)
         choice4Button.config(text=deathChoice)
+
+        randomize_choices()
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
 
@@ -398,12 +400,18 @@ def main():
     # gameState is 0
 
     def randomize_choices():
-        random.shuffle(posy_choices)
+        choices = [0, 1, 2, 3]
+        random.shuffle(choices)
 
-        choice1Button.place_configure(rely=posy_choices[0])
-        choice2Button.place_configure(rely=posy_choices[1])
-        choice3Button.place_configure(rely=posy_choices[2])
-        choice4Button.place_configure(rely=posy_choices[3])
+        choice1Button.config(text="test")
+        # choice1Button.place_configure
+        # choice1Button.place_configure
+        # choice1Button.place_configure
+
+        # choice1Button.place_configure(rely=posy_choices[0])
+        # choice2Button.place_configure(rely=posy_choices[1])
+        # choice3Button.place_configure(rely=posy_choices[2])
+        # choice4Button.place_configure(rely=posy_choices[3])
 
     if gameStateNum == 0:
         centerMessage = gameStateList[0].getMessage()
@@ -460,12 +468,20 @@ def main():
         buttonWidth = 80
 
         posy_choices = [0.69, 0.76, 0.83, 0.90]
-        random.shuffle(posy_choices)
-        # print(posy_choices[1])
+        # random.shuffle(posy_choices)
 
         choice1msg = gameStateList[0].getChoice1()
+        choice2msg = gameStateList[0].getChoice2()
+        choice3msg = gameStateList[0].getChoice3()
+        choice4msg = gameStateList[0].getChoiceDeath()
+
+        command_choices = [choice1, choice2, choice3, choice4]
+        msg_choices = [choice1msg, choice2msg, choice3msg, choice4msg]
+        # print(posy_choices[1])
+
+        # choice1msg = gameStateList[0].getChoice1()
         choice1Button = tk.Button(root,
-                                  text=choice1msg,
+                                  text=msg_choices[0],
                                   state=ACTIVE,
                                   width=buttonWidth,
                                   padx=5, pady=5,
@@ -474,9 +490,9 @@ def main():
                                   command=choice1)
         choice1Button.place(relx=0.5, rely=posy_choices[0], anchor=CENTER)
 
-        choice2msg = gameStateList[0].getChoice2()
+        # choice2msg = gameStateList[0].getChoice2()
         choice2Button = tk.Button(root,
-                                  text=choice2msg,
+                                  text=msg_choices[1],
                                   state=ACTIVE,
                                   width=buttonWidth,
                                   padx=5, pady=5,
@@ -485,9 +501,9 @@ def main():
                                   command=choice2)
         choice2Button.place(relx=0.5, rely=posy_choices[1], anchor=CENTER)
 
-        choice3msg = gameStateList[0].getChoice3()
+        # choice3msg = gameStateList[0].getChoice3()
         choice3Button = tk.Button(root,
-                                  text=choice3msg,
+                                  text=msg_choices[2],
                                   state=ACTIVE,
                                   width=buttonWidth,
                                   padx=5, pady=5,
@@ -496,9 +512,13 @@ def main():
                                   command=choice3)
         choice3Button.place(relx=0.5, rely=posy_choices[2], anchor=CENTER)
 
+<<<<<<< Updated upstream
         choice4msg = gameStateList[0].getChoiceDeath()
+=======
+        # choice4msg = gameStateList[0].getChoiceDeath()
+>>>>>>> Stashed changes
         choice4Button = tk.Button(root,
-                                  text=choice4msg,
+                                  text=msg_choices[3],
                                   state=ACTIVE,
                                   width=buttonWidth,
                                   padx=5, pady=5,
