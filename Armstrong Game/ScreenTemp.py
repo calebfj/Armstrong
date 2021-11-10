@@ -14,6 +14,8 @@ import time
 global gameStateNum
 global consequence
 global collectiblesList
+global numberOfCollected
+
 consequence = ""
 gameStateNum = 0
 # hey there :)
@@ -21,10 +23,7 @@ gameStateNum = 0
 global PlayerValues
 PlayerValues = PlayerValues()
 
-BlueOne = LED(23)
-BlueTwo = LED(25)
-BlueThree = LED(13)
-BlueFour = LED(26)
+BlueLights = LEDBoard(23, 25, 13, 26)
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN)
@@ -36,8 +35,6 @@ GPIO.setup(16, GPIO.IN)
 global amountOfCollect
 
 def main():
-    amountOfCollect = 0
-
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
@@ -109,6 +106,14 @@ def main():
 
     # myList = [GameState("hi")]
 
+    # Needs to be tested!
+    def checkLights(numberOfCollected):
+        for x in range(0, numberOfCollected):
+            if x == 4:
+                break
+            else:
+                BlueLights.on(x)
+
     def tick():
         if gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
@@ -129,6 +134,7 @@ def main():
         randomize_choices()
 
         if PlayerValues.isDead():
+            BlueLights.off()
             PlayerValues.setEndTime(time.time())
 
             GameTime = PlayerValues.getEndTime()
@@ -143,6 +149,8 @@ def main():
             secondChoice = ""
             thirdChoice = ""
             deathChoice = ""
+
+
 
         else:
             if gameStateNum == 5:
@@ -180,30 +188,40 @@ def main():
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
 
-        global collectiblesList
+        global collectiblesList, numberOfCollected
 
         collectiblesList = "Collectibles: \n"
+        numberOfCollected = 0
 
         if PlayerValues.hasBandages():
             collectiblesList += "🩹"
+            numberOfCollected += 1
 
         if PlayerValues.hasFood():
             collectiblesList += "🍞"
+            numberOfCollected += 1
 
         if PlayerValues.hasNormalMap():
             collectiblesList += "🗺"
+            numberOfCollected += 1
 
         if PlayerValues.hasDynamite():
             collectiblesList += "🧨"
+            numberOfCollected += 1
 
         if PlayerValues.hasEscapeMap():
             collectiblesList += "🏃‍"
+            numberOfCollected += 1
 
         if PlayerValues.hasDisguises():
             collectiblesList += "👔"
+            numberOfCollected += 1
 
         if PlayerValues.hasKey():
             collectiblesList += "🗝"
+            numberOfCollected += 1
+
+        checkLights(numberOfCollected)
 
         collectibles.config(text=collectiblesList)
 
@@ -400,6 +418,21 @@ def main():
 
     # gameState is 0
 
+    def relayToTkinterY(channel):
+        root.event_generate('<<yellow>>', when='tail')
+
+    def relayToTkinterR(channel):
+        root.event_generate('<<red>>', when='tail')
+
+    def relayToTkinterG(channel):
+        root.event_generate('<<green>>', when='tail')
+
+    def relayToTkinterB(channel):
+        root.event_generate('<<blue>>', when='tail')
+
+    def relayToTkinterS(channel):
+        root.event_generate('<<small>>', when='tail')
+
     def randomize_choices():
         random.shuffle(posy_choices)
 
@@ -515,21 +548,6 @@ def main():
                              font=("times", 10, "bold"),
                              bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
-
-    def relayToTkinterY(channel):
-        root.event_generate('<<yellow>>', when='tail')
-
-    def relayToTkinterR(channel):
-        root.event_generate('<<red>>', when='tail')
-
-    def relayToTkinterG(channel):
-        root.event_generate('<<green>>', when='tail')
-
-    def relayToTkinterB(channel):
-        root.event_generate('<<blue>>', when='tail')
-
-    def relayToTkinterS(channel):
-        root.event_generate('<<small>>', when='tail')
 
     GPIO.add_event_detect(17, GPIO.RISING, callback=relayToTkinterY, bouncetime=300) #Yellow Button
     GPIO.add_event_detect(22, GPIO.RISING, callback=relayToTkinterR, bouncetime=300) #Red Button
