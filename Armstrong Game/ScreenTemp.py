@@ -27,10 +27,10 @@ GreenButton = Button(27)
 BlueButton = Button(24)
 SmallButton = Button(16)
 
-# BlueOne = LED(23)
-# BlueTwo = LED(25)
-# BlueThree = LED(13)
-# BlueFour = LED(26)
+BlueOne = LED(23)
+BlueTwo = LED(25)
+BlueThree = LED(13)
+BlueFour = LED(26)
 
 ListLED = LEDBoard(23, 25, 13, 26)
 
