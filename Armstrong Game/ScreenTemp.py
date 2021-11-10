@@ -7,6 +7,9 @@ from tkinter.ttk import Frame, Button, Style
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
+from threading import Thread
+from queue import Queue
+
 global paused
 global pausedTime
 global TimeCheck
@@ -25,20 +28,19 @@ global StartTime
 PlayerValues = PlayerValues()
 
 
+def congrats(t):
+    return t
+
+
 def main():
     StartTime = time.time()
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
-    # gameState1 = GameState(
-    #     "You're on the battlefield, soldier. What do you do next?",
-    #
-    #     "Look for medical items in order to patch up the injured squad.",
-    #     "Look for food for yourself - you're famished.",
-    #     "You ignore the cabinets and keep walking.",
-    #     "This situation is too bleak - make a run for it."
-    # )
-
+    que = Queue()
+    t = Thread(target=lambda c, arg1: c.put(congrats(arg1)),args=(que,"Congrats!") )
+    t.start()
+    t.join()
     gameStateList = [
         GameState(  # gamestate 0
             "You're on the battlefield, soldier. What do you do next?",
@@ -81,12 +83,9 @@ def main():
             "Try to make it through the maze blind.",
             ""
         ),
+        
         GameState(  # finale
-            """End Screen: Displays the following game stats-
-                How many collectibles did you get?
-                How much health did you end up with?
-                Did you save your squad?
-                How fast was your game time?""",
+            que.get() + "\n\n", 
 
             "Restart game",
             "",
@@ -94,8 +93,7 @@ def main():
             ""
         )
     ]
-
-    # myList = [GameState("hi")]
+  
 
     def tick():
         if gameStateNum == 5 or PlayerValues.isDead():
@@ -175,28 +173,7 @@ def main():
 
         global collectiblesList
 
-        collectiblesList = "Collectibles: \n"
-
-        if PlayerValues.hasBandages():
-            collectiblesList += "🩹"
-
-        if PlayerValues.hasFood():
-            collectiblesList += "🍞"
-
-        if PlayerValues.hasNormalMap():
-            collectiblesList += "🗺"
-
-        if PlayerValues.hasDynamite():
-            collectiblesList += "🧨"
-
-        if PlayerValues.hasEscapeMap():
-            collectiblesList += "🏃‍"
-
-        if PlayerValues.hasDisguises():
-            collectiblesList += "👔"
-
-        if PlayerValues.hasKey():
-            collectiblesList += "🗝"
+        collectiblesList = ""
 
         collectibles.config(text=collectiblesList)
 
@@ -467,7 +444,7 @@ def main():
         health.place(relwidth=0.1, relheight=0.05, relx=0.1, rely=0.1)
 
         global collectiblesList
-        collectiblesList = "Collectibles: \n"
+        collectiblesList = ""
 
         collectibles = Label(
             root,
