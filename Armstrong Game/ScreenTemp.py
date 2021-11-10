@@ -22,16 +22,14 @@ PlayerValues = PlayerValues()
 
 YellowButton = Button(17)
 RedButton = Button(22)
-GreenButton = Button(27)
-BlueButton = Button(24)
+GreenButton = Button(24)
+BlueButton = Button(27)
 SmallButton = Button(16)
 
 BlueOne = LED(23)
 BlueTwo = LED(25)
 BlueThree = LED(13)
 BlueFour = LED(26)
-
-ListLED = LEDBoard(23, 25, 13, 26)
 
 global amountOfCollect
 
