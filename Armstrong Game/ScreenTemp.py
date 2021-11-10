@@ -5,6 +5,7 @@ from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DIS
 from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
 import keyboard
+from RPi import GPIO
 from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
@@ -20,16 +21,17 @@ gameStateNum = 0
 global PlayerValues
 PlayerValues = PlayerValues()
 
-YellowButton = Button(17)
-RedButton = Button(22)
-GreenButton = Button(24)
-BlueButton = Button(27)
-SmallButton = Button(16)
-
 BlueOne = LED(23)
 BlueTwo = LED(25)
 BlueThree = LED(13)
 BlueFour = LED(26)
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN)
+GPIO.setup(22, GPIO.IN)
+GPIO.setup(24, GPIO.IN)
+GPIO.setup(27, GPIO.IN)
+GPIO.setup(16, GPIO.IN)
 
 global amountOfCollect
 
@@ -118,6 +120,7 @@ def main():
             if TimeCheck >= 60:
                 MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
+
             runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
             runningClock.after(225, tick)
 
@@ -183,31 +186,24 @@ def main():
 
         if PlayerValues.hasBandages():
             collectiblesList += "🩹"
-            ListLED.on(0)
 
         if PlayerValues.hasFood():
             collectiblesList += "🍞"
-            ListLED.on(0)
 
         if PlayerValues.hasNormalMap():
             collectiblesList += "🗺"
-            ListLED.on(1)
 
         if PlayerValues.hasDynamite():
             collectiblesList += "🧨"
-            ListLED.on(2)
 
         if PlayerValues.hasEscapeMap():
             collectiblesList += "🏃‍"
-            ListLED.on(1)
 
         if PlayerValues.hasDisguises():
             collectiblesList += "👔"
-            ListLED.on(2)
 
         if PlayerValues.hasKey():
             collectiblesList += "🗝"
-            ListLED.on(3)
 
         collectibles.config(text=collectiblesList)
 
@@ -520,23 +516,34 @@ def main():
                              bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
 
-        root.bind("<a>", choice1)
-        root.bind("<s>", choice2)
-        root.bind("<d>", choice3)
-        root.bind("<f>", choice4)
+    def relayToTkinterY(channel):
+        root.event_generate('<<yellow>>', when='tail')
+
+    def relayToTkinterR(channel):
+        root.event_generate('<<red>>', when='tail')
+
+    def relayToTkinterG(channel):
+        root.event_generate('<<green>>', when='tail')
+
+    def relayToTkinterB(channel):
+        root.event_generate('<<blue>>', when='tail')
+
+    def relayToTkinterS(channel):
+        root.event_generate('<<small>>', when='tail')
+
+    GPIO.add_event_detect(17, GPIO.RISING, callback=relayToTkinterY, bouncetime=300) #Yellow Button
+    GPIO.add_event_detect(22, GPIO.RISING, callback=relayToTkinterR, bouncetime=300) #Red Button
+    GPIO.add_event_detect(27, GPIO.RISING, callback=relayToTkinterG, bouncetime=300) #Green Button
+    GPIO.add_event_detect(24, GPIO.RISING, callback=relayToTkinterB, bouncetime=300) #Blue Button
+    GPIO.add_event_detect(16, GPIO.RISING, callback=relayToTkinterS, bouncetime=300) #Small Button
+
+    root.bind('<<yellow>>', choice1)
+    root.bind('<<red>>', choice2)
+    root.bind('<<green>>', choice3)
+    root.bind('<<blue>>', choice4)
 
     tick()
 
-    if (YellowButton.is_active):
-        keyboard.press_and_release("a")
-    if (RedButton.is_active):
-        keyboard.press_and_release("s")
-    if (GreenButton.is_active):
-        keyboard.press_and_release("d")
-    if (BlueButton.is_active):
-        keyboard.press_and_release("f")
-    if (SmallButton.is_active):
-        keyboard.press_and_release("g")
 
     root.mainloop()
 
