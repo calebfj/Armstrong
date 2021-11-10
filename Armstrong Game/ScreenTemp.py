@@ -31,7 +31,6 @@ SmallButton = Button(16)
 # BlueThree = LED(13)
 # BlueFour = LED(26)
 
-ListLED = LEDBoard(23, 25, 13, 26)
 
 global amountOfCollect
 
@@ -186,32 +185,32 @@ def main():
         collectiblesList = "Collectibles: \n"
 
         if PlayerValues.hasBandages():
-            collectiblesList += "🩹"
             ListLED.on(0)
+            collectiblesList += "🍞"
 
         if PlayerValues.hasFood():
-            collectiblesList += "🍞"
             ListLED.on(0)
+            collectiblesList += "🍞"
 
         if PlayerValues.hasNormalMap():
-            collectiblesList += "🗺"
             ListLED.on(1)
+            collectiblesList += "🗺"
 
         if PlayerValues.hasDynamite():
-            collectiblesList += "🧨"
             ListLED.on(2)
+            collectiblesList += "🧨"
 
         if PlayerValues.hasEscapeMap():
-            collectiblesList += "🏃‍"
             ListLED.on(1)
+            collectiblesList += "🏃‍"
 
         if PlayerValues.hasDisguises():
-            collectiblesList += "👔"
             ListLED.on(2)
+            collectiblesList += "👔"
 
         if PlayerValues.hasKey():
-            collectiblesList += "🗝"
             ListLED.on(3)
+            collectiblesList += "🗝"
 
         collectibles.config(text=collectiblesList)
 
@@ -526,7 +525,6 @@ def main():
 
     tick()
 
-    # root.bind(ListOfButtons.is_pressed(0), choice1)
 
     root.mainloop()
 
