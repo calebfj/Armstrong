@@ -522,9 +522,23 @@ def main():
                              bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
 
+        root.bind("<a>", choice1)
+        root.bind("<s>", choice2)
+        root.bind("<d>", choice3)
+        root.bind("<f>", choice4)
+
     tick()
 
-    # root.bind(ListOfButtons.is_pressed(0), choice1)
+    if (YellowButton.is_active):
+        keyboard.press_and_release("a")
+    if (RedButton.is_active):
+        keyboard.press_and_release("s")
+    if (GreenButton.is_active):
+        keyboard.press_and_release("d")
+    if (BlueButton.is_active):
+        keyboard.press_and_release("f")
+    if (SmallButton.is_active):
+        keyboard.press_and_release("g")
 
     root.mainloop()
 
