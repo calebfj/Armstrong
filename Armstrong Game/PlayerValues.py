@@ -30,6 +30,11 @@ class PlayerValues:
         self.__endTime = 0
         self.__startTime = time.time()
 
+
+    def resetStartTime(self):
+        self.__startTime = time.time()
+
+
     def hasDynamite(self):
         return self.__hasDynamite
 

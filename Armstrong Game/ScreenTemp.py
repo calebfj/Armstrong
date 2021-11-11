@@ -21,12 +21,12 @@ gameStateNum = 99
 # hey there :)
 
 global PlayerValues
-global StartTime
+# global StartTime
 PlayerValues = PlayerValues()
 
 
 def main():
-    StartTime = time.time()
+    # StartTime = time.time()
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
@@ -98,7 +98,11 @@ def main():
     # myList = [GameState("hi")]
 
     def tick():
-        if gameStateNum == 5 or PlayerValues.isDead():
+        if gameStateNum == 99:
+            runningClock.config(text=f"Current Run Time: {0:.0f} minutes {0:.0f} seconds", bg="#f0f0f0")
+            runningClock.after(225, tick)
+
+        elif gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
             global pausedTime
@@ -283,6 +287,7 @@ def main():
 
         if gameStateNum == 99:
             gameStateNum = 0
+            PlayerValues.reset()
         else:
             gameStateNum += 1
 
@@ -551,8 +556,7 @@ def main():
         runningClock = Label(root,
                              font=("times", 10, "bold"),
                              bg="#406870")
-        runningClock.place(relx=0.4, rely=0.01)
-        
+        runningClock.place(relx=0.4, rely=0.01)        
 
 
     tick()
