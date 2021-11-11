@@ -206,6 +206,8 @@ def main():
     def updateGameValues():
         randomize_choices()
 
+        pausemsg = "Pause (Press the small button)"
+
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
 
@@ -261,6 +263,8 @@ def main():
         choice2Button.config(text=secondChoice)
         choice3Button.config(text=thirdChoice)
         choice4Button.config(text=deathChoice)
+        pauseButton.config(text=pausemsg)
+
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
 
@@ -604,7 +608,7 @@ def main():
                                   command=choice1)
         choice1Button.place(relx=0.5, rely=posy_choices[0], anchor=CENTER)
 
-        choice2msg = gameStateList[0].getChoice2()
+        choice2msg = ""
         choice2Button = tk.Button(root,
                                   text=choice2msg,
                                   state=ACTIVE,
@@ -615,7 +619,7 @@ def main():
                                   command=choice2)
         choice2Button.place(relx=0.5, rely=posy_choices[1], anchor=CENTER)
 
-        choice3msg = gameStateList[0].getChoice3()
+        choice3msg = ""
         choice3Button = tk.Button(root,
                                   text=choice3msg,
                                   state=ACTIVE,
@@ -626,7 +630,7 @@ def main():
                                   command=choice3)
         choice3Button.place(relx=0.5, rely=posy_choices[2], anchor=CENTER)
 
-        choice4msg = gameStateList[0].getChoiceDeath()
+        choice4msg = ""
         choice4Button = tk.Button(root,
                                   text=choice4msg,
                                   state=ACTIVE,
@@ -637,8 +641,10 @@ def main():
                                   command=choice4)
         choice4Button.place(relx=0.5, rely=posy_choices[3], anchor=CENTER)
 
+        #"Pause (Press the small button)"
+        pausemsg = ""
         pauseButton = tk.Button(root,
-                                text="Pause (Press the small button)",
+                                text=pausemsg,
                                 state=ACTIVE,
                                 width=30,
                                 padx=5, pady=5,
