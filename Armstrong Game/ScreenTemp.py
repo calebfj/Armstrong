@@ -99,7 +99,7 @@ def main():
 
     def tick():
         if gameStateNum == 99:
-            runningClock.config(text=f"Current Run Time: {0:.0f} minutes {0:.0f} seconds", bg="#f0f0f0")
+            runningClock.config(text="", bg="#f0f0f0")
             runningClock.after(225, tick)
 
         elif gameStateNum == 5 or PlayerValues.isDead():
@@ -471,7 +471,7 @@ def main():
             width=20,
             padx=5,
             pady=5,
-            text="Health: " + str(PlayerValues.getHealth())
+            text=""
         )
 
         # centerTextBox.
