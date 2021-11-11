@@ -11,7 +11,15 @@ from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
+from threading import Thread
+from queue import Queue
 
+global paused
+global pausedTime
+global TimeCheck
+TimeCheck = 0
+paused = False
+pausedTime = 0
 global gameStateNum
 global consequence
 global lcdmessages
@@ -23,6 +31,7 @@ gameStateNum = 0
 # hey there :)
 
 global PlayerValues
+global StartTime
 PlayerValues = PlayerValues()
 
 BlueLights = LEDBoard(23, 25, 13, 26)
@@ -47,10 +56,18 @@ lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols, 
 
 global amountOfCollect
 
+def congrats(t):
+    return t
+
 def main():
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
+
+    que = Queue()
+    t = Thread(target=lambda c, arg1: c.put(congrats(arg1)), args=(que, "Congrats!"))
+    t.start()
+    t.join()
 
     lcd.backlight_enabled
 
@@ -106,6 +123,7 @@ def main():
             ""
         ),
         GameState(  # finale
+            que.get() + "\n\n",
             """End Screen: Displays the following game stats-
                 How many collectibles did you get?
                 How much health did you end up with?
@@ -133,6 +151,12 @@ def main():
         if gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
+            global pausedTime
+            # if paused:
+            if not paused:
+                global TimeCheck
+                TimeCheck = abs(PlayerValues.getStartTime() - time.time() + pausedTime)
+
             TimeCheck = abs(PlayerValues.getStartTime() - time.time())
             MinuteTime = 0
             SecondTime = TimeCheck
@@ -148,6 +172,28 @@ def main():
 
             runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
             runningClock.after(225, tick)
+
+    def pause():
+        global paused
+        global pausedTime
+
+        if paused == False:
+            choice1Button.config(state=DISABLED)
+            choice2Button.config(state=DISABLED)
+            choice3Button.config(state=DISABLED)
+            choice4Button.config(state=DISABLED)
+            paused = True
+            pausedTime -= time.time()
+        else:
+            choice1Button.config(state=ACTIVE)
+            choice2Button.config(state=ACTIVE)
+            choice3Button.config(state=ACTIVE)
+            choice4Button.config(state=ACTIVE)
+            paused = False
+            pausedTime += time.time()
+
+    def keydown(e):
+        pause()
 
     # global centerMessage
     def updateGameValues():
@@ -591,6 +637,16 @@ def main():
                                   command=choice4)
         choice4Button.place(relx=0.5, rely=posy_choices[3], anchor=CENTER)
 
+        pauseButton = tk.Button(root,
+                                text="Pause",
+                                state=ACTIVE,
+                                width=int(5),
+                                padx=5, pady=5,
+                                fg="black",
+                                bg="#f0f0f0",
+                                command=pause)
+        pauseButton.place(relx=0.878, rely=0.12, anchor=CENTER)
+
         #Temp until we can forward it to LCD
         runningClock = Label(root,
                              font=("times", 10, "bold"),
@@ -607,10 +663,12 @@ def main():
     root.bind('<<red>>', choice2)
     root.bind('<<green>>', choice3)
     root.bind('<<blue>>', choice4)
+    root.bind('<<small>>', keydown())
 
     tick()
 
-
+    frame.pack()
+    frame.focus_set()
     root.mainloop()
 
 
