@@ -253,7 +253,7 @@ def main():
                 deathChoice = gameState.getChoiceDeath()
 
         result.config(text=consequence)
-        
+
         if not gameStateNum == 0:
             lcd.close(clear=True)
             lcd.write_string(lcdmessages)
