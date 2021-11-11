@@ -27,7 +27,7 @@ global collectiblesList
 global numberOfCollected
 
 consequence = ""
-gameStateNum = 0
+gameStateNum = 99
 # hey there :)
 
 global PlayerValues
@@ -149,7 +149,11 @@ def main():
                 BlueLights.on(x)
 
     def tick():
-        if gameStateNum == 5 or PlayerValues.isDead():
+        if gameStateNum == 99:
+            runningClock.config(text="", bg="#f0f0f0")
+            runningClock.after(225, tick)
+
+        elif gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
             global pausedTime
@@ -176,8 +180,12 @@ def main():
     def pause():
         global paused
         global pausedTime
+        global gameStateNum
 
-        if paused == False:
+        if gameStateNum == 99:
+            gameStateNum = 0
+            PlayerValues.reset()
+        elif paused == False:
             choice1Button.config(state=DISABLED)
             choice2Button.config(state=DISABLED)
             choice3Button.config(state=DISABLED)
@@ -529,7 +537,7 @@ def main():
         # global pausedTime
         # pausedTime += time.time()
 
-        centerMessage = 'Press "Start" to start!'
+        centerMessage = 'Press "Start" to start! (Press smalled Button)'
 
         centerTextBox = Label(
             root,
@@ -660,6 +668,7 @@ def main():
 
     tick()
 
+    frame = Frame(root, width=0, height=0)
     frame.pack()
     frame.focus_set()
     root.mainloop()
