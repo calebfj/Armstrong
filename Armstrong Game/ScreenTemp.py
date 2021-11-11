@@ -60,7 +60,6 @@ def congrats(t):
     return t
 
 def main():
-    StartTime = time.time()
 
     root = tk.Tk()
     root.geometry("1920x1080")
@@ -205,7 +204,7 @@ def main():
 
     # global centerMessage
     def updateGameValues():
-        # randomize_choices()
+        randomize_choices()
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
