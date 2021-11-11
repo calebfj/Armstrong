@@ -191,7 +191,7 @@ def main():
             paused = False
             pausedTime += time.time()
 
-    def keydown():
+    def keydown(e):
         pause()
 
     # global centerMessage
