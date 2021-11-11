@@ -60,6 +60,8 @@ def congrats(t):
     return t
 
 def main():
+    StartTime = time.time()
+
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
@@ -156,7 +158,6 @@ def main():
                 global TimeCheck
                 TimeCheck = abs(PlayerValues.getStartTime() - time.time() + pausedTime)
 
-            TimeCheck = abs(PlayerValues.getStartTime() - time.time())
             MinuteTime = 0
             SecondTime = TimeCheck
 
