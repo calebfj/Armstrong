@@ -6,6 +6,7 @@ from tkinter import RIGHT, BOTH, RAISED
 from tkinter.ttk import Frame, Button, Style
 import keyboard
 from RPi import GPIO
+from RPLCD import i2c
 from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
@@ -31,6 +32,17 @@ GPIO.setup(22, GPIO.IN)
 GPIO.setup(24, GPIO.IN)
 GPIO.setup(27, GPIO.IN)
 GPIO.setup(16, GPIO.IN)
+
+lcdmode = 'i2c'
+cols = 16
+rows = 2
+charmap = 'A00'
+i2c_expander = 'PCF8574'
+
+address = 0x27
+port = 1
+
+lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols, rows=rows)
 
 global amountOfCollect
 
@@ -178,6 +190,10 @@ def main():
                 deathChoice = gameState.getChoiceDeath()
 
         result.config(text=consequence)
+
+        lcd.close(clear=True)
+        lcd.write_string(consequence)
+        lcd.crlf()
 
         centerTextBox.config(text=message)
         choice1Button.config(text=firstChoice)
