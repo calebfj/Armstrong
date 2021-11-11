@@ -184,6 +184,7 @@ def main():
         if gameStateNum == 99:
             gameStateNum = 0
             PlayerValues.reset()
+            updateGameValues()
         elif paused == False:
             choice1Button.config(state=DISABLED)
             choice2Button.config(state=DISABLED)
