@@ -191,7 +191,7 @@ def main():
             paused = False
             pausedTime += time.time()
 
-    def keydown(e):
+    def keydown():
         pause()
 
     # global centerMessage
@@ -662,7 +662,7 @@ def main():
     root.bind('<<red>>', choice2)
     root.bind('<<green>>', choice3)
     root.bind('<<blue>>', choice4)
-    root.bind('<<small>>', keydown())
+    root.bind('<<small>>', keydown)
 
     tick()
 
