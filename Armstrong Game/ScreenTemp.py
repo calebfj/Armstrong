@@ -7,9 +7,6 @@ from tkinter.ttk import Frame, Button, Style
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
-from threading import Thread
-from queue import Queue
-
 global paused
 global pausedTime
 global TimeCheck
@@ -28,19 +25,20 @@ global StartTime
 PlayerValues = PlayerValues()
 
 
-def congrats(t):
-    return t
-
-
 def main():
     StartTime = time.time()
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
-    que = Queue()
-    t = Thread(target=lambda c, arg1: c.put(congrats(arg1)),args=(que,"Congrats!") )
-    t.start()
-    t.join()
+    # gameState1 = GameState(
+    #     "You're on the battlefield, soldier. What do you do next?",
+    #
+    #     "Look for medical items in order to patch up the injured squad.",
+    #     "Look for food for yourself - you're famished.",
+    #     "You ignore the cabinets and keep walking.",
+    #     "This situation is too bleak - make a run for it."
+    # )
+
     gameStateList = [
         GameState(  # gamestate 0
             "You're on the battlefield, soldier. What do you do next?",
@@ -83,9 +81,12 @@ def main():
             "Try to make it through the maze blind.",
             ""
         ),
-        
         GameState(  # finale
-            que.get() + "\n\n", 
+            """End Screen: Displays the following game stats-
+                How many collectibles did you get?
+                How much health did you end up with?
+                Did you save your squad?
+                How fast was your game time?""",
 
             "Restart game",
             "",
@@ -93,29 +94,27 @@ def main():
             ""
         )
     ]
-  
+
+    # myList = [GameState("hi")]
 
     def tick():
-        global TimeCheck
-        if gameStateNum == 99:
-            TimeCheck = 0
-        elif gameStateNum == 5 or PlayerValues.isDead():
+        if gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
             global pausedTime
             # if paused:
             if not paused:
-                
+                global TimeCheck
                 TimeCheck = abs(PlayerValues.getStartTime() - time.time() + pausedTime)
                 
-        MinuteTime = 0
-        SecondTime = TimeCheck
+            MinuteTime = 0
+            SecondTime = TimeCheck
 
-        if TimeCheck >= 60:
-            MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
+            if TimeCheck >= 60:
+                MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
-        runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
-        runningClock.after(225, tick)
+            runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
+            runningClock.after(225, tick)
 
     # global centerMessage
     def updateGameValues():
@@ -176,7 +175,28 @@ def main():
 
         global collectiblesList
 
-        collectiblesList = ""
+        collectiblesList = "Collectibles: \n"
+
+        if PlayerValues.hasBandages():
+            collectiblesList += "🩹"
+
+        if PlayerValues.hasFood():
+            collectiblesList += "🍞"
+
+        if PlayerValues.hasNormalMap():
+            collectiblesList += "🗺"
+
+        if PlayerValues.hasDynamite():
+            collectiblesList += "🧨"
+
+        if PlayerValues.hasEscapeMap():
+            collectiblesList += "🏃‍"
+
+        if PlayerValues.hasDisguises():
+            collectiblesList += "👔"
+
+        if PlayerValues.hasKey():
+            collectiblesList += "🗝"
 
         collectibles.config(text=collectiblesList)
 
@@ -185,6 +205,7 @@ def main():
             choice2Button.config(state=DISABLED)
             choice3Button.config(state=DISABLED)
             choice4Button.config(state=DISABLED)
+
 
         elif gameStateNum == 4:
             if not PlayerValues.hasKey():
@@ -526,14 +547,13 @@ def main():
                                   command=pause)
         pauseButton.place(relx=0.878, rely=0.12, anchor=CENTER)
 
-
-
-    #Temp until we can forward it to LCD
-    runningClock = Label(root,
-                            font=("times", 10, "bold"),
-                            bg="#406870")
-    runningClock.place(relx=0.4, rely=0.01)
+        #Temp until we can forward it to LCD
+        runningClock = Label(root,
+                             font=("times", 10, "bold"),
+                             bg="#406870")
+        runningClock.place(relx=0.4, rely=0.01)
         
+
 
     tick()
     # root.mainloop()
