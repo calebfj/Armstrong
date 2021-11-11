@@ -131,7 +131,7 @@ def main():
 
     # global centerMessage
     def updateGameValues():
-        randomize_choices()
+        # randomize_choices()
 
         if PlayerValues.isDead():
             BlueLights.off()
@@ -154,6 +154,7 @@ def main():
 
         else:
             if gameStateNum == 5:
+                BlueLights.off()
                 PlayerValues.setEndTime(time.time())
 
                 gameState = gameStateList[5]
@@ -274,6 +275,8 @@ def main():
             # collectiblesList = "Collectibles: "
 
             PlayerValues.reset()
+            numberOfCollected = 0
+            BlueLights.off()
 
             consequence = ""
             gameStateNum = -1
@@ -302,6 +305,7 @@ def main():
             collectiblesList = "Collectibles: "
 
             PlayerValues.reset()
+            BlueLights.off()
 
             consequence = ""
             gameStateNum = -1
