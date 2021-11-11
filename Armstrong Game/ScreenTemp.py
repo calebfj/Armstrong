@@ -253,10 +253,11 @@ def main():
                 deathChoice = gameState.getChoiceDeath()
 
         result.config(text=consequence)
-
-        lcd.close(clear=True)
-        lcd.write_string(lcdmessages)
-        lcd.crlf()
+        
+        if not gameStateNum == 0:
+            lcd.close(clear=True)
+            lcd.write_string(lcdmessages)
+            lcd.crlf()
 
         pausemsg = "Pause (Press the small button)"
 
