@@ -50,6 +50,8 @@ def main():
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
+    
+    lcd.backlight_enabled
 
     # gameState1 = GameState(
     #     "You're on the battlefield, soldier. What do you do next?",
