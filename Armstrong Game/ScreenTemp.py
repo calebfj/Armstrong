@@ -141,9 +141,9 @@ def main():
                 MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
             lcd.close(clear=True)
-            lcd.write_string('Current Run Time:')
+            lcd.write_string(f'{MinuteTime:.0f} minutes\n')
             lcd.crlf()
-            lcd.write_string(f'{MinuteTime:.0f} minutes {SecondTime:.0f} seconds')
+            lcd.write_string(f'{SecondTime:.0f} seconds')
             lcd.crlf()
 
             runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
