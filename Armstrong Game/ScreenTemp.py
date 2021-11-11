@@ -259,40 +259,30 @@ def main():
 
         global collectiblesList, numberOfCollected
 
-        # collectiblesList = "Collectibles: \n"
         numberOfCollected = 0
 
         if PlayerValues.hasBandages():
-            # collectiblesList += "🩹"
             numberOfCollected += 1
 
         if PlayerValues.hasFood():
-            # collectiblesList += "🍞"
             numberOfCollected += 1
 
         if PlayerValues.hasNormalMap():
-            # collectiblesList += "🗺"
             numberOfCollected += 1
 
         if PlayerValues.hasDynamite():
-            # collectiblesList += "🧨"
             numberOfCollected += 1
 
         if PlayerValues.hasEscapeMap():
-            # collectiblesList += "🏃‍"
             numberOfCollected += 1
 
         if PlayerValues.hasDisguises():
-            # collectiblesList += "👔"
             numberOfCollected += 1
 
         if PlayerValues.hasKey():
-            # collectiblesList += "🗝"
             numberOfCollected += 1
 
         checkLights(numberOfCollected)
-
-        # collectibles.config(text=collectiblesList)
 
         if gameStateNum == 5 or PlayerValues.isDead():
             choice1Button.config(state=ACTIVE)
@@ -535,8 +525,11 @@ def main():
         choice3Button.place_configure(rely=posy_choices[2])
         choice4Button.place_configure(rely=posy_choices[3])
 
-    if gameStateNum == 0:
-        centerMessage = gameStateList[0].getMessage()
+    if gameStateNum == 99:
+        # global pausedTime
+        # pausedTime += time.time()
+
+        centerMessage = 'Press "Start" to start!'
 
         centerTextBox = Label(
             root,
@@ -575,7 +568,7 @@ def main():
         health.place(relwidth=0.1, relheight=0.05, relx=0.1, rely=0.1)
 
         global collectiblesList
-        collectiblesList = "Collectibles: \n"
+        collectiblesList = ""
 
         collectibles = Label(
             root,
@@ -590,10 +583,10 @@ def main():
         buttonWidth = 80
 
         posy_choices = [0.69, 0.76, 0.83, 0.90]
-        random.shuffle(posy_choices)
+        # random.shuffle(posy_choices)
         # print(posy_choices[1])
 
-        choice1msg = gameStateList[0].getChoice1()
+        choice1msg = "Start"
         choice1Button = tk.Button(root,
                                   text=choice1msg,
                                   state=ACTIVE,
