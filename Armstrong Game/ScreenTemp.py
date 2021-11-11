@@ -20,7 +20,7 @@ global gameStateNum
 global consequence
 global collectiblesList
 consequence = ""
-gameStateNum = 0
+gameStateNum = 99
 # hey there :)
 
 global PlayerValues
@@ -96,23 +96,26 @@ def main():
   
 
     def tick():
-        if gameStateNum == 5 or PlayerValues.isDead():
+        global TimeCheck
+        if gameStateNum == 99:
+            TimeCheck = 0
+        elif gameStateNum == 5 or PlayerValues.isDead():
             runningClock.after(225, tick)
         else:
             global pausedTime
             # if paused:
             if not paused:
-                global TimeCheck
+                
                 TimeCheck = abs(PlayerValues.getStartTime() - time.time() + pausedTime)
                 
-            MinuteTime = 0
-            SecondTime = TimeCheck
+        MinuteTime = 0
+        SecondTime = TimeCheck
 
-            if TimeCheck >= 60:
-                MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
+        if TimeCheck >= 60:
+            MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
-            runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
-            runningClock.after(225, tick)
+        runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
+        runningClock.after(225, tick)
 
     # global centerMessage
     def updateGameValues():
@@ -182,7 +185,6 @@ def main():
             choice2Button.config(state=DISABLED)
             choice3Button.config(state=DISABLED)
             choice4Button.config(state=DISABLED)
-
 
         elif gameStateNum == 4:
             if not PlayerValues.hasKey():
@@ -258,7 +260,10 @@ def main():
             consequence = ""
             gameStateNum = -1
 
-        gameStateNum += 1
+        if gameStateNum == 99:
+            gameStateNum = 0
+        else:
+            gameStateNum += 1
 
         updateGameValues()
 
@@ -404,8 +409,11 @@ def main():
     def keydown(e):
         pause()
 
-    if gameStateNum == 0:
-        centerMessage = gameStateList[0].getMessage()
+    if gameStateNum == 99:
+        # global pausedTime
+        # pausedTime += time.time()
+
+        centerMessage = 'Press "Start" to start!'
 
         centerTextBox = Label(
             root,
@@ -459,10 +467,11 @@ def main():
         buttonWidth = 80
 
         posy_choices = [0.69, 0.76, 0.83, 0.90]
-        random.shuffle(posy_choices)
+        # random.shuffle(posy_choices)
         # print(posy_choices[1])
+        
 
-        choice1msg = gameStateList[0].getChoice1()
+        choice1msg = "Start"
         choice1Button = tk.Button(root,
                                   text=choice1msg,
                                   state=ACTIVE,
@@ -472,11 +481,12 @@ def main():
                                   bg="#f0f0f0",
                                   command=choice1)
         choice1Button.place(relx=0.5, rely=posy_choices[0], anchor=CENTER)
+        
 
-        choice2msg = gameStateList[0].getChoice2()
+        choice2msg = ""
         choice2Button = tk.Button(root,
                                   text=choice2msg,
-                                  state=ACTIVE,
+                                  state=DISABLED,
                                   width=buttonWidth,
                                   padx=5, pady=5,
                                   fg="black",
@@ -484,10 +494,10 @@ def main():
                                   command=choice2)
         choice2Button.place(relx=0.5, rely=posy_choices[1], anchor=CENTER)
 
-        choice3msg = gameStateList[0].getChoice3()
+        choice3msg = ""
         choice3Button = tk.Button(root,
                                   text=choice3msg,
-                                  state=ACTIVE,
+                                  state=DISABLED,
                                   width=buttonWidth,
                                   padx=5, pady=5,
                                   fg="black",
@@ -495,11 +505,10 @@ def main():
                                   command=choice3)
         choice3Button.place(relx=0.5, rely=posy_choices[2], anchor=CENTER)
 
-        choice4msg = gameStateList[0].getChoiceDeath()
-
+        choice4msg = ""
         choice4Button = tk.Button(root,
                                   text=choice4msg,
-                                  state=ACTIVE,
+                                  state=DISABLED,
                                   width=buttonWidth,
                                   padx=5, pady=5,
                                   fg="black",
@@ -517,13 +526,14 @@ def main():
                                   command=pause)
         pauseButton.place(relx=0.878, rely=0.12, anchor=CENTER)
 
-        #Temp until we can forward it to LCD
-        runningClock = Label(root,
-                             font=("times", 10, "bold"),
-                             bg="#406870")
-        runningClock.place(relx=0.4, rely=0.01)
-        
 
+
+    #Temp until we can forward it to LCD
+    runningClock = Label(root,
+                            font=("times", 10, "bold"),
+                            bg="#406870")
+    runningClock.place(relx=0.4, rely=0.01)
+        
 
     tick()
     # root.mainloop()
