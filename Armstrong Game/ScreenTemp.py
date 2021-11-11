@@ -132,7 +132,6 @@ def main():
 
             "Restart game",
             "",
-            "",
             ""
         )
     ]
@@ -165,7 +164,7 @@ def main():
                 MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
             lcd.close(clear=True)
-            lcd.write_string(f'{MinuteTime:.0f} minutes\n')
+            lcd.write_string(f'{MinuteTime:.0f} minutes')
             lcd.crlf()
             lcd.write_string(f'{SecondTime:.0f} seconds')
             lcd.crlf()
