@@ -184,6 +184,7 @@ def main():
         if gameStateNum == 99:
             gameStateNum = 0
             PlayerValues.reset()
+            updateGameValues()
         elif paused == False:
             choice1Button.config(state=DISABLED)
             choice2Button.config(state=DISABLED)
@@ -201,13 +202,10 @@ def main():
 
     def keydown(e):
         pause()
-        updateGameValues()
 
     # global centerMessage
     def updateGameValues():
         randomize_choices()
-
-        pausemsg = "Pause (Press the small button)"
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
@@ -245,6 +243,7 @@ def main():
                 thirdChoice = gameState.getChoice3()
                 deathChoice = gameState.getChoiceDeath()
             else:
+                print(gameStateNum)
                 gameState = gameStateList[gameStateNum]
 
                 message = gameState.getMessage()
@@ -258,6 +257,8 @@ def main():
         lcd.close(clear=True)
         lcd.write_string(lcdmessages)
         lcd.crlf()
+
+        pausemsg = "Pause (Press the small button)"
 
         centerTextBox.config(text=message)
         choice1Button.config(text=firstChoice)
