@@ -134,7 +134,6 @@ def main():
         # randomize_choices()
 
         if PlayerValues.isDead():
-            BlueLights.off()
             PlayerValues.setEndTime(time.time())
 
             GameTime = PlayerValues.getEndTime()
@@ -154,7 +153,6 @@ def main():
 
         else:
             if gameStateNum == 5:
-                BlueLights.off()
                 PlayerValues.setEndTime(time.time())
 
                 gameState = gameStateList[5]
@@ -191,40 +189,40 @@ def main():
 
         global collectiblesList, numberOfCollected
 
-        collectiblesList = "Collectibles: \n"
+        # collectiblesList = "Collectibles: \n"
         numberOfCollected = 0
 
         if PlayerValues.hasBandages():
-            collectiblesList += "🩹"
+            # collectiblesList += "🩹"
             numberOfCollected += 1
 
         if PlayerValues.hasFood():
-            collectiblesList += "🍞"
+            # collectiblesList += "🍞"
             numberOfCollected += 1
 
         if PlayerValues.hasNormalMap():
-            collectiblesList += "🗺"
+            # collectiblesList += "🗺"
             numberOfCollected += 1
 
         if PlayerValues.hasDynamite():
-            collectiblesList += "🧨"
+            # collectiblesList += "🧨"
             numberOfCollected += 1
 
         if PlayerValues.hasEscapeMap():
-            collectiblesList += "🏃‍"
+            # collectiblesList += "🏃‍"
             numberOfCollected += 1
 
         if PlayerValues.hasDisguises():
-            collectiblesList += "👔"
+            # collectiblesList += "👔"
             numberOfCollected += 1
 
         if PlayerValues.hasKey():
-            collectiblesList += "🗝"
+            # collectiblesList += "🗝"
             numberOfCollected += 1
 
         checkLights(numberOfCollected)
 
-        collectibles.config(text=collectiblesList)
+        # collectibles.config(text=collectiblesList)
 
         if gameStateNum == 5 or PlayerValues.isDead():
             choice1Button.config(state=ACTIVE)
