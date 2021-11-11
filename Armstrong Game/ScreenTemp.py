@@ -638,14 +638,14 @@ def main():
         choice4Button.place(relx=0.5, rely=posy_choices[3], anchor=CENTER)
 
         pauseButton = tk.Button(root,
-                                text="Pause",
+                                text="Pause (Press the small button)",
                                 state=ACTIVE,
-                                width=int(5),
+                                width=30,
                                 padx=5, pady=5,
                                 fg="black",
                                 bg="#f0f0f0",
                                 command=pause)
-        pauseButton.place(relx=0.878, rely=0.12, anchor=CENTER)
+        pauseButton.place(relx=0.5, rely=0.97, anchor=CENTER)
 
         #Temp until we can forward it to LCD
         runningClock = Label(root,
