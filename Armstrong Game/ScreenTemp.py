@@ -122,12 +122,13 @@ def main():
         collectiblesNum = 0
 
         global collectiblesList
-        
+        squad = "You did not save your squad"
         collectiblesList = "Collectibles: \n"
 
         if PlayerValues.hasBandages():
             collectiblesList += "🩹"
             collectiblesNum += 1
+            squad = "You saved your squad!"
 
         if PlayerValues.hasFood():
             collectiblesList += "🍞"
@@ -183,7 +184,7 @@ def main():
                 if GameTime >= 60:
                     MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-                message = m + f'\nYou had {phealth:.0f} hearts remaining\nYou got {collectiblesNum:.0f} collectibles' + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+                message = m + f'\nYou had {phealth:.0f} hearts remaining\nYou got {collectiblesNum:.0f} collectibles\n' +squad+ f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
                 firstChoice = gameState.getChoice1()
                 secondChoice = gameState.getChoice2()
                 thirdChoice = gameState.getChoice3()
