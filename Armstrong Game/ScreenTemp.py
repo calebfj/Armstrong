@@ -28,10 +28,10 @@ global consequence
 global lcdmessages
 global collectiblesList
 global numberOfCollected
+global amountOfCollect
 
 consequence = ""
 gameStateNum = 99
-# hey there :)
 
 global PlayerValues
 global StartTime
@@ -57,8 +57,6 @@ port = 1
 
 lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols, rows=rows)
 
-global amountOfCollect
-
 def congrats(t):
     return t
 
@@ -67,6 +65,7 @@ def main():
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
+
     que = Queue()
     t = Thread(target=lambda c, arg1: c.put(congrats(arg1)), args=(que, "Congrats!"))
     t.start()
@@ -125,6 +124,21 @@ def main():
             ""
         )
     ]
+
+    def relayToTkinterY(channel):
+        root.event_generate('<<yellow>>', when='tail')
+
+    def relayToTkinterR(channel):
+        root.event_generate('<<red>>', when='tail')
+
+    def relayToTkinterG(channel):
+        root.event_generate('<<green>>', when='tail')
+
+    def relayToTkinterB(channel):
+        root.event_generate('<<blue>>', when='tail')
+
+    def relayToTkinterS(channel):
+        root.event_generate('<<small>>', when='tail')
 
     def checkLights(numberOfCollected):
         for x in range(0, numberOfCollected):
@@ -192,8 +206,6 @@ def main():
     # global centerMessage
     def updateGameValues():
         global collectiblesList, numberOfCollected, pausedTime
-
-        randomize_choices()
 
         squad = "You did not save your squad!"
 
@@ -516,29 +528,6 @@ def main():
 
     # gameState is 0
 
-    def relayToTkinterY(channel):
-        root.event_generate('<<yellow>>', when='tail')
-
-    def relayToTkinterR(channel):
-        root.event_generate('<<red>>', when='tail')
-
-    def relayToTkinterG(channel):
-        root.event_generate('<<green>>', when='tail')
-
-    def relayToTkinterB(channel):
-        root.event_generate('<<blue>>', when='tail')
-
-    def relayToTkinterS(channel):
-        root.event_generate('<<small>>', when='tail')
-
-    def randomize_choices():
-        random.shuffle(posy_choices)
-
-        choice1Button.place_configure(rely=posy_choices[0])
-        choice2Button.place_configure(rely=posy_choices[1])
-        choice3Button.place_configure(rely=posy_choices[2])
-        choice4Button.place_configure(rely=posy_choices[3])
-
     if gameStateNum == 99:
         # global pausedTime
         # pausedTime += time.time()
@@ -680,6 +669,5 @@ def main():
     frame.pack()
     frame.focus_set()
     root.mainloop()
-
 
 main()
