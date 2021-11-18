@@ -129,16 +129,20 @@ def main():
         root.event_generate('<<yellow>>', when='tail')
 
     def relayToTkinterR(channel):
-        root.event_generate('<<red>>', when='tail')
+        if not(gameStateNum == 5 or PlayerValues.isDead()):
+            root.event_generate('<<red>>', when='tail')
 
     def relayToTkinterG(channel):
-        root.event_generate('<<green>>', when='tail')
+        if not (gameStateNum == 5 or PlayerValues.isDead()):
+            root.event_generate('<<green>>', when='tail')
 
     def relayToTkinterB(channel):
-        root.event_generate('<<blue>>', when='tail')
+        if not (gameStateNum == 5 or PlayerValues.isDead()):
+            root.event_generate('<<blue>>', when='tail')
 
     def relayToTkinterS(channel):
-        root.event_generate('<<small>>', when='tail')
+        if not (gameStateNum == 5 or PlayerValues.isDead()):
+            root.event_generate('<<small>>', when='tail')
 
     def checkLights(numberOfCollected):
         for x in range(0, numberOfCollected):
@@ -311,6 +315,7 @@ def main():
             choice2Button.config(state=DISABLED)
             choice3Button.config(state=DISABLED)
             choice4Button.config(state=DISABLED)
+            pauseButton.config(state=DISABLED)
 
 
         elif gameStateNum == 4:
