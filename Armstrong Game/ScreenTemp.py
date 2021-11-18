@@ -404,10 +404,10 @@ def main():
             choice3Button.config(state=ACTIVE)
             choice4Button.config(state=ACTIVE)
 
-            yellowIsDisabled = True
-            redIsDisabled = True
-            greenIsDisabled = True
-            blueIsDisabled = True
+            yellowIsDisabled = False
+            redIsDisabled = False
+            greenIsDisabled = False
+            blueIsDisabled = False
 
         else:
             choice1Button.config(state=ACTIVE)
