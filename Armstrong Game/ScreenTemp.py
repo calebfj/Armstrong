@@ -73,6 +73,7 @@ def main():
     global greenIsDisabled
     global blueIsDisabled
     global smallIsDisabled
+    global m
 
     if gameStateNum == 99:
         yellowIsDisabled = True
@@ -91,10 +92,11 @@ def main():
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
 
-    # que = Queue()
-    # t = Thread(target=lambda c, arg1: c.put(congrats(arg1)), args=(que, "Congrats!"))
-    # t.start()
-    # t.join()
+    que = Queue()
+    t = Thread(target=lambda c, arg1: c.put(congrats(arg1)),args=(que,"Congrats!"))
+    t.start()
+    t.join()
+    m = que.get()
 
     lcd.backlight_enabled
 
@@ -252,7 +254,7 @@ def main():
 
     # global centerMessage
     def updateGameValues():
-        global collectiblesList, numberOfCollected, pausedTime, yellowIsDisabled, redIsDisabled, greenIsDisabled, blueIsDisabled, smallIsDisabled
+        global collectiblesList, numberOfCollected, pausedTime, yellowIsDisabled, redIsDisabled, greenIsDisabled, blueIsDisabled, smallIsDisabled, m
 
         squad = "You did not save your squad!"
 
@@ -284,8 +286,6 @@ def main():
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
-            # m = que.get()
-            m = "Congrats!"
 
             pausedTime = 0
             phealth = len(PlayerValues.getHealth())
@@ -307,8 +307,6 @@ def main():
         else:
             if gameStateNum == 5:
                 PlayerValues.setEndTime(time.time())
-                # m = que.get()
-                m = "Congrats!"
 
                 pausedTime = 0
                 phealth = len(PlayerValues.getHealth())
@@ -403,11 +401,13 @@ def main():
             choice2Button.config(state=ACTIVE)
             choice3Button.config(state=ACTIVE)
             choice4Button.config(state=ACTIVE)
+            pauseButton.config(state=ACTIVE)
 
             yellowIsDisabled = False
             redIsDisabled = False
             greenIsDisabled = False
             blueIsDisabled = False
+            smallIsDisabled = False
 
         else:
             choice1Button.config(state=ACTIVE)
