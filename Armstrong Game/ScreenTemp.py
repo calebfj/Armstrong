@@ -141,7 +141,7 @@ def main():
             root.event_generate('<<blue>>', when='tail')
 
     def relayToTkinterS(channel):
-        print(pauseButton.info)
+        print(pauseButton.grab_status())
         if not (gameStateNum == 5 or PlayerValues.isDead() or pauseButton.gra):
             root.event_generate('<<small>>', when='tail')
 
