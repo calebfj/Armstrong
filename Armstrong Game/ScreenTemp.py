@@ -11,15 +11,18 @@ from gpiozero import LED, Button, LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
+
 from threading import Thread
 from queue import Queue
 
 global paused
 global pausedTime
 global TimeCheck
+
 TimeCheck = 0
 paused = False
 pausedTime = 0
+
 global gameStateNum
 global consequence
 global lcdmessages
@@ -64,22 +67,12 @@ def main():
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
-
     que = Queue()
     t = Thread(target=lambda c, arg1: c.put(congrats(arg1)), args=(que, "Congrats!"))
     t.start()
     t.join()
 
     lcd.backlight_enabled
-
-    # gameState1 = GameState(
-    #     "You're on the battlefield, soldier. What do you do next?",
-    #
-    #     "Look for medical items in order to patch up the injured squad.",
-    #     "Look for food for yourself - you're famished.",
-    #     "You ignore the cabinets and keep walking.",
-    #     "This situation is too bleak - make a run for it."
-    # )
 
     gameStateList = [
         GameState(  # gamestate 0
@@ -124,22 +117,15 @@ def main():
             ""
         ),
         GameState(  # finale
-            que.get() + "\n\n",
-            """End Screen: Displays the following game stats-
-                How many collectibles did you get?
-                How much health did you end up with?
-                Did you save your squad?
-                How fast was your game time?""",
+            "",
 
             "Restart game",
+            "",
             "",
             ""
         )
     ]
 
-    # myList = [GameState("hi")]
-
-    # Needs to be tested!
     def checkLights(numberOfCollected):
         for x in range(0, numberOfCollected):
             if x == 4:
@@ -205,10 +191,45 @@ def main():
 
     # global centerMessage
     def updateGameValues():
+        global collectiblesList, numberOfCollected, pausedTime
+
         randomize_choices()
+
+        squad = "You did not save your squad!"
+
+        numberOfCollected = 0
+
+        if PlayerValues.hasBandages():
+            numberOfCollected += 1
+            squad = "You saved your squad!!!"
+
+        if PlayerValues.hasFood():
+            numberOfCollected += 1
+
+        if PlayerValues.hasNormalMap():
+            numberOfCollected += 1
+
+        if PlayerValues.hasDynamite():
+            numberOfCollected += 1
+
+        if PlayerValues.hasEscapeMap():
+            numberOfCollected += 1
+
+        if PlayerValues.hasDisguises():
+            numberOfCollected += 1
+
+        if PlayerValues.hasKey():
+            numberOfCollected += 1
+
+        checkLights(numberOfCollected)
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
+            m = que.get()
+
+            pausedTime = 0
+            phealth = len(PlayerValues.getHealth())
+            gameState = gameStateList[5]
 
             GameTime = PlayerValues.getEndTime()
             MinuteTime = 0
@@ -217,19 +238,21 @@ def main():
             if GameTime >= 60:
                 MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-            message = "You Goofed." + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
-            firstChoice = "Restart"
-            secondChoice = ""
-            thirdChoice = ""
-            deathChoice = ""
-
-
+            message = m + f'\nYou had {phealth:.0f} hearts remaining\nYou got {numberOfCollected:.0f} collectibles\n' + squad + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+            firstChoice = gameState.getChoice1()
+            secondChoice = gameState.getChoice2()
+            thirdChoice = gameState.getChoice3()
+            deathChoice = gameState.getChoiceDeath()
 
         else:
             if gameStateNum == 5:
                 PlayerValues.setEndTime(time.time())
+                m = que.get()
 
+                pausedTime = 0
+                phealth = len(PlayerValues.getHealth())
                 gameState = gameStateList[5]
+
                 GameTime = PlayerValues.getEndTime()
                 MinuteTime = 0
                 SecondTime = GameTime
@@ -237,7 +260,7 @@ def main():
                 if GameTime >= 60:
                     MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-                message = gameState.getMessage() + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+                message = m + f'\nYou had {phealth:.0f} hearts remaining\nYou got {numberOfCollected:.0f} collectibles\n' + squad + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
                 firstChoice = gameState.getChoice1()
                 secondChoice = gameState.getChoice2()
                 thirdChoice = gameState.getChoice3()
@@ -270,33 +293,6 @@ def main():
 
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
-
-        global collectiblesList, numberOfCollected
-
-        numberOfCollected = 0
-
-        if PlayerValues.hasBandages():
-            numberOfCollected += 1
-
-        if PlayerValues.hasFood():
-            numberOfCollected += 1
-
-        if PlayerValues.hasNormalMap():
-            numberOfCollected += 1
-
-        if PlayerValues.hasDynamite():
-            numberOfCollected += 1
-
-        if PlayerValues.hasEscapeMap():
-            numberOfCollected += 1
-
-        if PlayerValues.hasDisguises():
-            numberOfCollected += 1
-
-        if PlayerValues.hasKey():
-            numberOfCollected += 1
-
-        checkLights(numberOfCollected)
 
         if gameStateNum == 5 or PlayerValues.isDead():
             choice1Button.config(state=ACTIVE)
@@ -388,7 +384,11 @@ def main():
             consequence = ""
             gameStateNum = -1
 
-        gameStateNum += 1
+        if gameStateNum == 99:
+            gameStateNum = 0
+            PlayerValues.reset()
+        else:
+            gameStateNum += 1
 
         updateGameValues()
 
