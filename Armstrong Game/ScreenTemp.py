@@ -74,11 +74,18 @@ def main():
     global blueIsDisabled
     global smallIsDisabled
 
-    yellowIsDisabled = True
-    redIsDisabled = True
-    greenIsDisabled = True
-    blueIsDisabled = True
-    smallIsDisabled = False
+    if gameStateNum == 99:
+        yellowIsDisabled = True
+        redIsDisabled = True
+        greenIsDisabled = True
+        blueIsDisabled = True
+        smallIsDisabled = False
+    else:
+        yellowIsDisabled = False
+        redIsDisabled = False
+        greenIsDisabled = False
+        blueIsDisabled = False
+        smallIsDisabled = False
 
     root = tk.Tk()
     root.geometry("1920x1080")
