@@ -66,10 +66,10 @@ def main():
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
 
-    que = Queue()
-    t = Thread(target=lambda c, arg1: c.put(congrats(arg1)), args=(que, "Congrats!"))
-    t.start()
-    t.join()
+    # que = Queue()
+    # t = Thread(target=lambda c, arg1: c.put(congrats(arg1)), args=(que, "Congrats!"))
+    # t.start()
+    # t.join()
 
     lcd.backlight_enabled
 
@@ -241,7 +241,8 @@ def main():
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
-            m = que.get()
+            # m = que.get()
+            m = "Congrats!"
 
             pausedTime = 0
             phealth = len(PlayerValues.getHealth())
@@ -263,7 +264,8 @@ def main():
         else:
             if gameStateNum == 5:
                 PlayerValues.setEndTime(time.time())
-                m = que.get()
+                # m = que.get()
+                m = "Congrats!"
 
                 pausedTime = 0
                 phealth = len(PlayerValues.getHealth())
