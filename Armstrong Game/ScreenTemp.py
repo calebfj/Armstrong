@@ -141,7 +141,8 @@ def main():
             root.event_generate('<<blue>>', when='tail')
 
     def relayToTkinterS(channel):
-        if not (gameStateNum == 5 or PlayerValues.isDead()):
+        print(pauseButton.info)
+        if not (gameStateNum == 5 or PlayerValues.isDead() or pauseButton.gra):
             root.event_generate('<<small>>', when='tail')
 
     def checkLights(numberOfCollected):
