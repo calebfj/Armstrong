@@ -74,6 +74,12 @@ def main():
     global blueIsDisabled
     global smallIsDisabled
 
+    yellowIsDisabled = True
+    redIsDisabled = True
+    greenIsDisabled = True
+    blueIsDisabled = True
+    smallIsDisabled = False
+
     root = tk.Tk()
     root.geometry("1920x1080")
     root.tk.call('tk', 'scaling', 2.0)
