@@ -46,6 +46,13 @@ GPIO.setup(24, GPIO.IN)
 GPIO.setup(27, GPIO.IN)
 GPIO.setup(16, GPIO.IN)
 
+global yellowIsDisabled
+global redIsDisabled
+global greenIsDisabled
+global blueIsDisabled
+global smallIsDisabled
+
+
 lcdmode = 'i2c'
 cols = 16
 rows = 2
@@ -61,6 +68,11 @@ def congrats(t):
     return t
 
 def main():
+    global yellowIsDisabled
+    global redIsDisabled
+    global greenIsDisabled
+    global blueIsDisabled
+    global smallIsDisabled
 
     root = tk.Tk()
     root.geometry("1920x1080")
@@ -126,23 +138,23 @@ def main():
     ]
 
     def relayToTkinterY(channel):
-        root.event_generate('<<yellow>>', when='tail')
+        if not yellowIsDisabled:
+            root.event_generate('<<yellow>>', when='tail')
 
     def relayToTkinterR(channel):
-        if not(gameStateNum == 5 or PlayerValues.isDead()):
+        if not(gameStateNum == 5 or PlayerValues.isDead() or redIsDisabled):
             root.event_generate('<<red>>', when='tail')
 
     def relayToTkinterG(channel):
-        if not (gameStateNum == 5 or PlayerValues.isDead()):
+        if not (gameStateNum == 5 or PlayerValues.isDead() or greenIsDisabled):
             root.event_generate('<<green>>', when='tail')
 
     def relayToTkinterB(channel):
-        if not (gameStateNum == 5 or PlayerValues.isDead()):
+        if not (gameStateNum == 5 or PlayerValues.isDead() or blueIsDisabled):
             root.event_generate('<<blue>>', when='tail')
 
     def relayToTkinterS(channel):
-        print(pauseButton.grab_status())
-        if not (gameStateNum == 5 or PlayerValues.isDead() or pauseButton.gra):
+        if not (gameStateNum == 5 or PlayerValues.isDead() or smallIsDisabled):
             root.event_generate('<<small>>', when='tail')
 
     def checkLights(numberOfCollected):
@@ -185,6 +197,11 @@ def main():
         global paused
         global pausedTime
         global gameStateNum
+        global yellowIsDisabled
+        global redIsDisabled
+        global greenIsDisabled
+        global blueIsDisabled
+        global smallIsDisabled
 
         if gameStateNum == 99:
             gameStateNum = 0
@@ -195,6 +212,12 @@ def main():
             choice2Button.config(state=DISABLED)
             choice3Button.config(state=DISABLED)
             choice4Button.config(state=DISABLED)
+
+            yellowIsDisabled = True
+            redIsDisabled = True
+            greenIsDisabled = True
+            blueIsDisabled = True
+
             paused = True
             pausedTime -= time.time()
         else:
@@ -202,6 +225,12 @@ def main():
             choice2Button.config(state=ACTIVE)
             choice3Button.config(state=ACTIVE)
             choice4Button.config(state=ACTIVE)
+
+            yellowIsDisabled = False
+            redIsDisabled = False
+            greenIsDisabled = False
+            blueIsDisabled = False
+
             paused = False
             pausedTime += time.time()
 
@@ -210,7 +239,7 @@ def main():
 
     # global centerMessage
     def updateGameValues():
-        global collectiblesList, numberOfCollected, pausedTime
+        global collectiblesList, numberOfCollected, pausedTime, yellowIsDisabled, redIsDisabled, greenIsDisabled, blueIsDisabled, smallIsDisabled
 
         squad = "You did not save your squad!"
 
@@ -310,6 +339,11 @@ def main():
         choice4Button.config(text=deathChoice)
         pauseButton.config(text=pausemsg)
 
+        yellowIsDisabled = False
+        redIsDisabled = False
+        greenIsDisabled = False
+        blueIsDisabled = False
+        smallIsDisabled = False
 
         health.config(text="Health: " + str(PlayerValues.getHealth()))
 
@@ -320,24 +354,36 @@ def main():
             choice4Button.config(state=DISABLED)
             pauseButton.config(state=DISABLED)
 
+            yellowIsDisabled = False
+            redIsDisabled = True
+            greenIsDisabled = True
+            blueIsDisabled = True
+            smallIsDisabled = True
+
 
         elif gameStateNum == 4:
             if not PlayerValues.hasKey():
                 choice1Button.config(state=DISABLED)
+                yellowIsDisabled = True
             if not PlayerValues.hasDynamite():
                 choice2Button.config(state=DISABLED)
+                redIsDisabled = True
 
         elif gameStateNum == 3 and not PlayerValues.hasDisguises():
             choice1Button.config(state=DISABLED)
+            yellowIsDisabled = True
 
         elif gameStateNum == 2:
             if not (PlayerValues.hasBandages() and PlayerValues.hasEscapeMap()):
                 choice1Button.config(state=DISABLED)
+                yellowIsDisabled = True
             if not (PlayerValues.hasNormalMap() or PlayerValues.hasEscapeMap()):
                 choice2Button.config(state=DISABLED)
+                redIsDisabled = True
 
         elif gameStateNum == 1 and not PlayerValues.hasBandages():
             choice1Button.config(state=DISABLED)
+            yellowIsDisabled = True
 
         elif gameStateNum == 0:
             choice1Button.config(state=ACTIVE)
@@ -345,8 +391,14 @@ def main():
             choice3Button.config(state=ACTIVE)
             choice4Button.config(state=ACTIVE)
 
+            yellowIsDisabled = True
+            redIsDisabled = True
+            greenIsDisabled = True
+            blueIsDisabled = True
+
         else:
             choice1Button.config(state=ACTIVE)
+            yellowIsDisabled = False
 
     def choice1(event):
         # print("why")
