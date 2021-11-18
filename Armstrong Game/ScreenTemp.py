@@ -298,11 +298,12 @@ def main():
             if GameTime >= 60:
                 MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
-            message = m + f'\nYou had {phealth:.0f} hearts remaining\nYou got {numberOfCollected:.0f} collectibles\n' + squad + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
+            message = f'\nYou had {phealth:.0f} hearts remaining\nYou got {numberOfCollected:.0f} collectibles\n' + squad + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
             firstChoice = gameState.getChoice1()
             secondChoice = gameState.getChoice2()
             thirdChoice = gameState.getChoice3()
             deathChoice = gameState.getChoiceDeath()
+            lcdmessages = "YOU DIED!!!"
 
         else:
             if gameStateNum == 5:
@@ -324,6 +325,7 @@ def main():
                 secondChoice = gameState.getChoice2()
                 thirdChoice = gameState.getChoice3()
                 deathChoice = gameState.getChoiceDeath()
+                lcdmessages = "You escaped!!!"
             else:
                 print(gameStateNum)
                 gameState = gameStateList[gameStateNum]
@@ -336,7 +338,7 @@ def main():
 
         result.config(text=consequence)
 
-        if not gameStateNum == 0:
+        if gameStateNum == 5 or PlayerValues.isDead():
             lcd.close(clear=True)
             lcd.write_string(lcdmessages)
             lcd.crlf()
@@ -422,7 +424,6 @@ def main():
         global gameStateNum
         global consequence
         global PlayerValues
-        global lcdmessages
 
         if PlayerValues.isDead():
             # global collectiblesList
@@ -437,27 +438,22 @@ def main():
 
         if gameStateNum == 0:
             consequence = "You find bandages."
-            lcdmessages = "You found bandages!"
             PlayerValues.unlockBandages()
 
         if gameStateNum == 1:
             consequence = "One of Armstrongs teammates finds an escape map!"
-            lcdmessages = "You found the escape map!"
             PlayerValues.unlockEscapeMap()
 
         if gameStateNum == 2:
             consequence = "You find some clothes you might be able to use as disguises."
-            lcdmessages = "You found disguises!"
             PlayerValues.unlockDisguises()
 
         if gameStateNum == 3:
             consequence = """You find a key labeled "Emergency Escape Hatch"."""
-            lcdmessages = "You found the Escape Hatch!"
             PlayerValues.unlockKey()
 
         if gameStateNum == 4:
             consequence = "You successfully escape!"
-            lcdmessages = "You escaped!!"
 
         if gameStateNum == 5:
             global collectiblesList
@@ -482,22 +478,18 @@ def main():
         # centerTextBox.config(text=message)
         global gameStateNum
         global consequence
-        global lcdmessages
 
         if gameStateNum == 0:
             consequence = "You find some food for your squad. You eat your portion. +1 HP"
-            lcdmessages = "+1 HP to your Health"
             PlayerValues.unlockFood()
             PlayerValues.changeHealth(1)
 
         if gameStateNum == 1:
             consequence = "You find a normal map."
-            lcdmessages = "You found the normal map!"
             PlayerValues.unlockNormalMap()
 
         if gameStateNum == 2:  # requires escape map OR normal map
             consequence = "You find dynamite!"
-            lcdmessages = "You found the dynamite!"
             PlayerValues.unlockDynamite()
 
         if gameStateNum == 3:
@@ -505,7 +497,6 @@ def main():
 
         if gameStateNum == 4:
             consequence = "You escape with minor injuries but it's only a matter of time before they find you. -1 HP"
-            lcdmessages = "-1 HP to your Health"
             PlayerValues.changeHealth(-1)
 
         # if gameStateNum == 2:
@@ -521,31 +512,25 @@ def main():
         # centerTextBox.config(text=message)
         global gameStateNum
         global consequence
-        global lcdmessages
 
         if gameStateNum == 0:
             consequence = "You trip on a wire and you are injured by a trap in the wall. 'ITS A TRAP! AAGH' -1 HP"
-            lcdmessages = "-1 HP to your Health"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 1:
             consequence = "You find nothing and step on a rusty nail. 'WHO LEAVES A RUSTY NAIL THERE?' -1 HP"
-            lcdmessages = "-1 HP to your Health"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 2:
             consequence = "You step on a rusty nail AGAIN. 'WHO LEAVES TWO RUSTY NAILS ON THE GROUND??' -1 HP"
-            lcdmessages = "-1 HP to your Health"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 3:
             consequence = "It ricochets back at you. 'ROCK LEE WHY HAVE YOU FORSAKEN ME' -1 HP"
-            lcdmessages = "-1 HP to your Health"
             PlayerValues.changeHealth(-1)
 
         if gameStateNum == 4:
             consequence = "You cannot unlock the escape hatch, oh no the enemy sees you. Enjoy prison!"
-            lcdmessages = "-1 HP to your Health"
             PlayerValues.die()
 
         gameStateNum += 1
@@ -556,23 +541,18 @@ def main():
         # centerTextBox.config(text=message)
         global gameStateNum
         global consequence
-        global lcdmessages
 
         if gameStateNum == 0:
             consequence = "You get hit by a motar round. Your bits fly everywhere."
-            lcdmessages = "YOU DIED!"
 
         if gameStateNum == 1:
             consequence = "A self destruct sequences starts and the building blows up. Oof."
-            lcdmessages = "YOU DIED!"
 
         if gameStateNum == 2:
             consequence = "Your convincing skills were subpar. You got captured."
-            lcdmessages = "YOU DIED!"
 
         if gameStateNum == 3:
             consequence = "A grandma beats you to death for cutting in front of her in line."
-            lcdmessages = "YOU DIED!"
 
         gameStateNum += 1
 
