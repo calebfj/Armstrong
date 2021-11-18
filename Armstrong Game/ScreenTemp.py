@@ -381,6 +381,8 @@ def main():
             if not PlayerValues.hasDynamite():
                 choice2Button.config(state=DISABLED)
                 redIsDisabled = True
+                
+            blueIsDisabled = True
 
         elif gameStateNum == 3 and not PlayerValues.hasDisguises():
             choice1Button.config(state=DISABLED)
