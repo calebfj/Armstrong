@@ -152,26 +152,36 @@ def main():
         )
     ]
 
+    #These relay methods take in the input from the GPIO handler as a "channel" and then generate a virtual event within the
+    #root's main thread which is detected and then interrupts the main thread to execute a specific action, in our case
+    #an action would be the choice1, choice2, choice3, choice4 or pause buttons being clicked. After the interruption the thread is
+    #reinstated and continues to run until the next virtual event.
+
+    #Relay method to the yellow button on the PI Controller
     def relayToTkinterY(channel):
         if not yellowIsDisabled:
             root.event_generate('<<yellow>>', when='tail')
 
+    #Relay method to the red button on the PI Controller
     def relayToTkinterR(channel):
         if not(gameStateNum == 5 or PlayerValues.isDead() or redIsDisabled):
             root.event_generate('<<red>>', when='tail')
 
+    #Relay method to the green button on the PI Controller
     def relayToTkinterG(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or greenIsDisabled):
             root.event_generate('<<green>>', when='tail')
 
+    #Relay method to the blue button on the PI Controller
     def relayToTkinterB(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or blueIsDisabled):
             root.event_generate('<<blue>>', when='tail')
 
+    #Relay method to the small/pause button on the PI Controller
     def relayToTkinterS(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or smallIsDisabled):
             root.event_generate('<<small>>', when='tail')
-
+    
     def checkLights(numberOfCollected):
         for x in range(0, numberOfCollected):
             if x == 4:
