@@ -181,7 +181,7 @@ def main():
     def relayToTkinterS(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or smallIsDisabled):
             root.event_generate('<<small>>', when='tail')
-    
+
     def checkLights(numberOfCollected):
         for x in range(0, numberOfCollected):
             if x == 4:
@@ -716,12 +716,19 @@ def main():
                              bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
 
+    #This grouping of GPIO statements act as the intial handler for all GPIO input connections. Once it detects a completed circuit
+    #on the controller whichi is designated as GPIO.RISING, it will callback to one of the relay methods based on the specific GPIO connection
+    #that it was detected from. In total the buttons are handled by GPIO pins 17, 22, 27, 24 and 16. Each method in the handler also has a bouncetime
+    #which is similar to a timer interrupt, it gives the method the alloted amount of time to respond and if the handler does not get a response, it
+    #will ignore the signal.
+
     GPIO.add_event_detect(17, GPIO.RISING, callback=relayToTkinterY, bouncetime=300) #Yellow Button
     GPIO.add_event_detect(22, GPIO.RISING, callback=relayToTkinterR, bouncetime=300) #Red Button
     GPIO.add_event_detect(27, GPIO.RISING, callback=relayToTkinterG, bouncetime=300) #Green Button
     GPIO.add_event_detect(24, GPIO.RISING, callback=relayToTkinterB, bouncetime=300) #Blue Button
     GPIO.add_event_detect(16, GPIO.RISING, callback=relayToTkinterS, bouncetime=300) #Small Button
 
+    # 
     root.bind('<<yellow>>', choice1)
     root.bind('<<red>>', choice2)
     root.bind('<<green>>', choice3)
