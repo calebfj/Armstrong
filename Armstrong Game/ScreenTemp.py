@@ -100,17 +100,19 @@ def main():
 
     lcd.backlight_enabled
 
+    # GameState methods are essentially containers for each game scenario. Using this list,
+    # we can iterate the gameStateNum variable to move on to the next scenario.
     gameStateList = [
         GameState(  # gamestate 0
-            "You're on the battlefield, soldier. What do you do next?",
+            "You're on the battlefield, soldier. What do you do next?",  # prompt
 
-            "Look for medical items in order to patch up the injured squad.",
-            "Look for food for yourself - you're famished.",
+            "Look for medical items in order to patch up the injured squad.",  # result: hasSquad()
+            "Look for food for yourself - you're famished.",    # result: hasFood()
             "You ignore the cabinets and keep walking.",  # result: you step on a wire -1 hp
             "This situation is too bleak - make a run for it."  # death
         ),
         GameState(  # gamestate 1
-            "You go back to your squad. You see a strange room, a chest, and a mysterious red button on the wall.",
+            "You go back to your squad. You see a strange room, a chest, and a mysterious red button on the wall.",  # prompt
 
             "You have your team search around.",
             "Open the chest",
@@ -118,7 +120,7 @@ def main():
             "Push the mysterious button."  # death
         ),
         GameState(  # gamestate 2
-            "You're now passing the enemy's basecamp. What will you do?",
+            "You're now passing the enemy's basecamp. What will you do?",  # prompt
 
             "Using a map, you find a soldier's barracks and steal disguises for your team",  # button 1
             "Check out the armory.",  # button 2
@@ -126,7 +128,7 @@ def main():
             "Try to convince a guard to help you out."  # death
         ),
         GameState(  # gamestate 3
-            "You're now at the enemy checkpoint to leave the battlefield. What do you want to do?",  # button 1
+            "You're now at the enemy checkpoint to leave the battlefield. What do you want to do?",  # prompt
 
             "Your squad puts on disguises and enters the checkpoint office to see if there is anything useful there.",
             # button 2
@@ -135,11 +137,11 @@ def main():
             "You see a break in the crowd at the checkpoint. Run for it!"  # death
         ),
         GameState(  # gamestate 4
-            "You encounter a maze.",
+            "You encounter a maze.",  # prompt
 
-            "Using the map and the key, try to escape!",
-            "Use the dynamite to blow through the maze.",
-            "Try to make it through the maze blind.",
+            "Using the map and the key, try to escape!",  # Good option
+            "Use the dynamite to blow through the maze.",  # Less good option
+            "Try to make it through the maze blind.",  # Death ending
             ""
         ),
         GameState(  # finale
@@ -218,6 +220,7 @@ def main():
             runningClock.config(text=f"Current Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds", bg="#f0f0f0")
             runningClock.after(225, tick)
 
+    # This method activates when the player activates the pause_button
     def pause():
         global paused
         global pausedTime
@@ -228,10 +231,13 @@ def main():
         global blueIsDisabled
         global smallIsDisabled
 
+        # the 99 gameStateNum is the paused gameState
         if gameStateNum == 99:
             gameStateNum = 0
             PlayerValues.reset()
             updateGameValues()
+
+        # if the game isn't paused, then the user is trying to pause.
         elif paused == False:
             choice1Button.config(state=DISABLED)
             choice2Button.config(state=DISABLED)
@@ -245,6 +251,8 @@ def main():
 
             paused = True
             pausedTime -= time.time()
+
+        # if the game IS paused, then the user is trying to unpause the game.
         else:
             choice1Button.config(state=ACTIVE)
             choice2Button.config(state=ACTIVE)
@@ -262,7 +270,9 @@ def main():
     def keydown(e):
         pause()
 
-    # global centerMessage
+    # This method will update various game values, as well as on-screen
+    # GUI labels and buttons, depending on both the gameState and the choices
+    # the player has made so far.
     def updateGameValues():
         global collectiblesList, numberOfCollected, pausedTime, yellowIsDisabled, redIsDisabled, greenIsDisabled, blueIsDisabled, smallIsDisabled, m
 
@@ -293,6 +303,7 @@ def main():
             numberOfCollected += 1
 
         checkLights(numberOfCollected)
+
 
         if PlayerValues.isDead():
             PlayerValues.setEndTime(time.time())
@@ -428,19 +439,11 @@ def main():
             yellowIsDisabled = False
 
     def choice1(event):
-        # print("why")
-        # message = "You chose Choice 1!"
-        # centerTextBox.config(text=message)
-        # messagebox.showinfo( "Choice 1", "You choose Choice 1!")
-        # choice1.config(text="Test")
         global gameStateNum
         global consequence
         global PlayerValues
 
         if PlayerValues.isDead():
-            # global collectiblesList
-            # collectiblesList = "Collectibles: "
-
             PlayerValues.reset()
             numberOfCollected = 0
             BlueLights.off()
@@ -448,6 +451,7 @@ def main():
             consequence = ""
             gameStateNum = -1
 
+        # check which scenario the user was in when they clicked the button
         if gameStateNum == 0:
             consequence = "You find bandages."
             PlayerValues.unlockBandages()
@@ -467,6 +471,7 @@ def main():
         if gameStateNum == 4:
             consequence = "You successfully escape!"
 
+        # since the player has escaped, the game is over
         if gameStateNum == 5:
             global collectiblesList
             collectiblesList = "Collectibles: "
