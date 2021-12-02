@@ -1,13 +1,10 @@
-import random
 from tkinter import *
 import tkinter as tk
-from tkinter import Text, filedialog, LEFT, TOP, BOTTOM, messagebox, ACTIVE, DISABLED
-from tkinter import RIGHT, BOTH, RAISED
-from tkinter.ttk import Frame, Button, Style
-import keyboard
+from tkinter import LEFT, ACTIVE, DISABLED
+from tkinter.ttk import Frame
 from RPi import GPIO
 from RPLCD import i2c
-from gpiozero import LED, Button, LEDBoard
+from gpiozero import LEDBoard
 from GameState import GameState
 from PlayerValues import PlayerValues
 import time
@@ -53,6 +50,10 @@ global blueIsDisabled
 global smallIsDisabled
 
 
+# The following code statements are utilized to setup the reference for the 16x2 LCD Screen's object. This object has multiple methods that allow
+# us to send string data to the screen, manage format of on screen data and manage the screen itself (Such as cutting the screen on or off based on user activity).
+# These variables are primarily meant to map the LCD's designation within the PI in order for the device to be recongized by the PI, as well as designate the specific
+# output format the LCD will be managed through.
 lcdmode = 'i2c'
 cols = 16
 rows = 2
@@ -62,8 +63,11 @@ i2c_expander = 'PCF8574'
 address = 0x27
 port = 1
 
+# This statement creates the intractable LCD reference object utilizing the above variables.
 lcd = i2c.CharLCD(i2c_expander, address, port=port, charmap=charmap, cols=cols, rows=rows)
 
+# The congrats method is a formal method that is utilized by the thread library as a callback method
+# with its only function being that it returns its argument parameter.
 def congrats(t):
     return t
 
@@ -154,32 +158,32 @@ def main():
         )
     ]
 
-    #These relay methods take in the input from the GPIO handler as a "channel" and then generate a virtual event within the
-    #root's main thread which is detected and then interrupts the main thread to execute a specific action, in our case
-    #an action would be the choice1, choice2, choice3, choice4 or pause buttons being clicked. After the interruption the thread is
-    #reinstated and continues to run until the next virtual event.
+    # These relay methods take in the input from the GPIO handler as a "channel" and then generate a virtual event within the
+    # root's main thread which is detected and then interrupts the main thread to execute a specific action, in our case
+    # an action would be the choice1, choice2, choice3, choice4 or pause buttons being clicked. After the interruption the thread is
+    # reinstated and continues to run until the next virtual event.
 
-    #Relay method to the yellow button on the PI Controller
+    # Relay method to the yellow button on the PI Controller
     def relayToTkinterY(channel):
         if not yellowIsDisabled:
             root.event_generate('<<yellow>>', when='tail')
 
-    #Relay method to the red button on the PI Controller
+    # Relay method to the red button on the PI Controller
     def relayToTkinterR(channel):
         if not(gameStateNum == 5 or PlayerValues.isDead() or redIsDisabled):
             root.event_generate('<<red>>', when='tail')
 
-    #Relay method to the green button on the PI Controller
+    # Relay method to the green button on the PI Controller
     def relayToTkinterG(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or greenIsDisabled):
             root.event_generate('<<green>>', when='tail')
 
-    #Relay method to the blue button on the PI Controller
+    # Relay method to the blue button on the PI Controller
     def relayToTkinterB(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or blueIsDisabled):
             root.event_generate('<<blue>>', when='tail')
 
-    #Relay method to the small/pause button on the PI Controller
+    # Relay method to the small/pause button on the PI Controller
     def relayToTkinterS(channel):
         if not (gameStateNum == 5 or PlayerValues.isDead() or smallIsDisabled):
             root.event_generate('<<small>>', when='tail')
@@ -191,6 +195,9 @@ def main():
             else:
                 BlueLights.on(x)
 
+    # The tick method does not take in any specific parameters, however it does act as an interrupt method within the Tkinter GUI loop in order to keep track of the current
+    # running time within the specific user's game. This method parses out a string output to send to both the Tkinter GUI and LCD Screen every time the tick method updates the
+    # internal game clock. With the flow of it stopping during a pause screen event, and resumed once the event is over.
     def tick():
         if gameStateNum == 99:
             runningClock.config(text="", bg="#f0f0f0")
@@ -211,6 +218,10 @@ def main():
             if TimeCheck >= 60:
                 MinuteTime, SecondTime = (TimeCheck // 60, TimeCheck % 60)
 
+            # The following is an example of how the LCD Screen object is utlized to send data into the 16x2 LCD screen. In this case, string formating and
+            # the write_string command were used in order to output string data onto the lcd during each tick method iteration. The close method is utilized to clear off the screen of
+            # any previous string texts so that no string data errors are caused during output by previous outputs and the .crtlf method is a line feed method that sends the data off
+            # towards the LCD screen for output.
             lcd.close(clear=True)
             lcd.write_string(f'{MinuteTime:.0f} minutes')
             lcd.crlf()
@@ -516,9 +527,6 @@ def main():
             consequence = "You escape with minor injuries but it's only a matter of time before they find you. -1 HP"
             PlayerValues.changeHealth(-1)
 
-        # if gameStateNum == 2:
-        #     PlayerValues.unlockDynamite()
-
         gameStateNum += 1
         updateGameValues()
 
@@ -721,17 +729,17 @@ def main():
                              bg="#406870")
         runningClock.place(relx=0.4, rely=0.01)
 
-    #This grouping of GPIO statements act as the intial handler for all GPIO input connections. Once it detects a completed circuit
-    #on the controller whichi is designated as GPIO.RISING, it will callback to one of the relay methods based on the specific GPIO connection
-    #that it was detected from. In total the buttons are handled by GPIO pins 17, 22, 27, 24 and 16. Each method in the handler also has a bouncetime
-    #which is similar to a timer interrupt, it gives the method the alloted amount of time to respond and if the handler does not get a response, it
-    #will ignore the signal.
+    # This grouping of GPIO statements act as the intial handler for all GPIO input connections. Once it detects a completed circuit
+    # on the controller whichi is designated as GPIO.RISING, it will callback to one of the relay methods based on the specific GPIO connection
+    # that it was detected from. In total the buttons are handled by GPIO pins 17, 22, 27, 24 and 16. Each method in the handler also has a bouncetime
+    # which is similar to a timer interrupt, it gives the method the alloted amount of time to respond and if the handler does not get a response, it
+    # will ignore the signal.
 
-    GPIO.add_event_detect(17, GPIO.RISING, callback=relayToTkinterY, bouncetime=300) #Yellow Button
-    GPIO.add_event_detect(22, GPIO.RISING, callback=relayToTkinterR, bouncetime=300) #Red Button
-    GPIO.add_event_detect(27, GPIO.RISING, callback=relayToTkinterG, bouncetime=300) #Green Button
-    GPIO.add_event_detect(24, GPIO.RISING, callback=relayToTkinterB, bouncetime=300) #Blue Button
-    GPIO.add_event_detect(16, GPIO.RISING, callback=relayToTkinterS, bouncetime=300) #Small Button
+    GPIO.add_event_detect(17, GPIO.RISING, callback=relayToTkinterY, bouncetime=300) # Yellow Button
+    GPIO.add_event_detect(22, GPIO.RISING, callback=relayToTkinterR, bouncetime=300) # Red Button
+    GPIO.add_event_detect(27, GPIO.RISING, callback=relayToTkinterG, bouncetime=300) # Green Button
+    GPIO.add_event_detect(24, GPIO.RISING, callback=relayToTkinterB, bouncetime=300) # Blue Button
+    GPIO.add_event_detect(16, GPIO.RISING, callback=relayToTkinterS, bouncetime=300) # Small Button
 
     # 
     root.bind('<<yellow>>', choice1)
