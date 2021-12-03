@@ -409,6 +409,7 @@ def main():
 
         result.config(text=consequence)
 
+        # If the user has finished the game or died, clear the LCDs.
         if gameStateNum == 5 or PlayerValues.isDead():
             lcd.close(clear=True)
             lcd.write_string(lcdmessages)
@@ -488,6 +489,8 @@ def main():
             choice1Button.config(state=ACTIVE)
             yellowIsDisabled = False
 
+    # The method for the first choice button. This method will check which gameState the user is in
+    # and react accordingly.
     def choice1(event):
         global gameStateNum
         global consequence
@@ -501,7 +504,7 @@ def main():
             consequence = ""
             gameStateNum = -1
 
-        # check which scenario the user was in when they clicked the button
+        # Check which scenario the user was in when they clicked the button
         if gameStateNum == 0:
             consequence = "You find bandages."
             PlayerValues.unlockBandages()
@@ -540,12 +543,15 @@ def main():
 
         updateGameValues()
 
+    # The method for the second choice button. This method will check which gameState the user is in
+    # and react accordingly.
     def choice2(event):
         # message = "You chose Choice 2!"
         # centerTextBox.config(text=message)
         global gameStateNum
         global consequence
 
+        # Check which scenario the user was in when they clicked the button
         if gameStateNum == 0:
             consequence = "You find some food for your squad. You eat your portion. +1 HP"
             PlayerValues.unlockFood()
@@ -571,12 +577,13 @@ def main():
 
         # what did you find
 
+    # The method for the third choice button. This method will check which gameState the user is in
+    # and react accordingly.
     def choice3(event):
-        # message = "You chose Choice 3!"
-        # centerTextBox.config(text=message)
         global gameStateNum
         global consequence
 
+        # Check which scenario the user was in when they clicked the button
         if gameStateNum == 0:
             consequence = "You trip on a wire and you are injured by a trap in the wall. 'ITS A TRAP! AAGH' -1 HP"
             PlayerValues.changeHealth(-1)
@@ -600,12 +607,13 @@ def main():
         gameStateNum += 1
         updateGameValues()
 
+    # The method for the fourth choice button. This method will check which gameState the user is in
+    # and react accordingly.
     def choice4(event):
-        # message = "You chose Choice 4!"
-        # centerTextBox.config(text=message)
         global gameStateNum
         global consequence
 
+        # Check which scenario the user was in when they clicked the button
         if gameStateNum == 0:
             consequence = "You get hit by a motar round. Your bits fly everywhere."
 
@@ -624,6 +632,8 @@ def main():
 
         updateGameValues()
 
+
+    # Placing screen elements
     canvas = tk.Canvas(root, height=700, width=700, bg="#f0f0f0")
     canvas.pack()
 
@@ -637,18 +647,10 @@ def main():
     textFrame.place(relwidth=0.85, relheight=0.56, relx=0.0735, rely=0.07)
 
 
-    # set the message
-
-    # centerTextBox.insert('end', centerMessage)
-
-    # centerTextBox.config(state='disabled')
-
-    # gameState is 0
-
+    # If the gameState is such that the game has just begun, create all of the screen elements
+    # and set their values such that they are all in the correct positions on the screen and all
+    # buttons upon interaction will react with the correct methods.
     if gameStateNum == 99:
-        # global pausedTime
-        # pausedTime += time.time()
-
         centerMessage = 'Press "Start" to start! (Press smalled Button)'
 
         centerTextBox = Label(
@@ -703,8 +705,6 @@ def main():
         buttonWidth = 80
 
         posy_choices = [0.69, 0.76, 0.83, 0.90]
-        # random.shuffle(posy_choices)
-        # print(posy_choices[1])
 
         choice1msg = "Start"
         choice1Button = tk.Button(root,
