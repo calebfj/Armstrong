@@ -415,8 +415,10 @@ def main():
             lcd.write_string(lcdmessages)
             lcd.crlf()
 
+        # This statement initializes the pause button's text
         pausemsg = "Pause (Press the small button)"
 
+        # This set of statements update the GUI elements
         centerTextBox.config(text=message)
         choice1Button.config(text=firstChoice)
         choice2Button.config(text=secondChoice)
@@ -430,8 +432,11 @@ def main():
         blueIsDisabled = False
         smallIsDisabled = False
 
-        health.config(text="Health: " + str(PlayerValues.getHealth()))
+        # Dynamically updates the health bar based on the user's current HP
+        health.config(text="Health: " + str(PlayerValues.getHealth()))  
 
+        # If the game has ended or the player has died, only the first button (Start) 
+        # should be clickable, so this set of statements disables all but the first button.
         if gameStateNum == 5 or PlayerValues.isDead():
             choice1Button.config(state=ACTIVE)
             choice2Button.config(state=DISABLED)
@@ -447,9 +452,12 @@ def main():
 
 
         elif gameStateNum == 4:
-            if not PlayerValues.hasKey():
+            # If the player does not have a key, the first choice for scenario (gameState) 4 is locked to them.
+            if not PlayerValues.hasKey(): 
                 choice1Button.config(state=DISABLED)
                 yellowIsDisabled = True
+
+            # If the player does not have dynamite, the second choice for scenario (gameState) 4 is locked to them.
             if not PlayerValues.hasDynamite():
                 choice2Button.config(state=DISABLED)
                 redIsDisabled = True
@@ -457,21 +465,28 @@ def main():
             blueIsDisabled = True
 
         elif gameStateNum == 3 and not PlayerValues.hasDisguises():
+            # If the player does not have dynamite, the first choice for scenario (gameState) 3 is locked to them.
             choice1Button.config(state=DISABLED)
             yellowIsDisabled = True
 
         elif gameStateNum == 2:
+            # If the player does not have bandages, the first choice for scenario (gameState) 2 is locked to them.
             if not (PlayerValues.hasBandages() and PlayerValues.hasEscapeMap()):
                 choice1Button.config(state=DISABLED)
                 yellowIsDisabled = True
+
+            # If the player does not have the Normal Map, the second choice for scenario (gameState) 2 is locked to them.
             if not (PlayerValues.hasNormalMap() or PlayerValues.hasEscapeMap()):
                 choice2Button.config(state=DISABLED)
                 redIsDisabled = True
-
+            
+        # If the player does not have bandages, the first choice for scenario (gameState) 1 is locked to them.
         elif gameStateNum == 1 and not PlayerValues.hasBandages():
             choice1Button.config(state=DISABLED)
             yellowIsDisabled = True
 
+        # gameState 0 indicates the game has just begun, so all buttons should be made active - all choices are available
+        # in this first (0th) scenario.
         elif gameStateNum == 0:
             choice1Button.config(state=ACTIVE)
             choice2Button.config(state=ACTIVE)
@@ -485,6 +500,8 @@ def main():
             blueIsDisabled = False
             smallIsDisabled = False
 
+        # The gameState must be 99, which indicates that the game hasn't started yet, so the first option (Start) must
+        # be made available to the user.
         else:
             choice1Button.config(state=ACTIVE)
             yellowIsDisabled = False
@@ -496,6 +513,7 @@ def main():
         global consequence
         global PlayerValues
 
+        # If the player is dead, all of their values along with the game values are wiped.
         if PlayerValues.isDead():
             PlayerValues.reset()
             numberOfCollected = 0
@@ -504,7 +522,8 @@ def main():
             consequence = ""
             gameStateNum = -1
 
-        # Check which scenario the user was in when they clicked the button
+        # Check which scenario the user was in when they clicked the button and give them the corresponding
+        # consequence to display and update their player values.
         if gameStateNum == 0:
             consequence = "You find bandages."
             PlayerValues.unlockBandages()
@@ -524,7 +543,7 @@ def main():
         if gameStateNum == 4:
             consequence = "You successfully escape!"
 
-        # since the player has escaped, the game is over
+        # The player has escaped, the game is over. Reset all values.
         if gameStateNum == 5:
             global collectiblesList
             collectiblesList = "Collectibles: "
@@ -535,12 +554,15 @@ def main():
             consequence = ""
             gameStateNum = -1
 
+        # The game is over and the user has clicked "Restart", so the game is reset by wiping all
+        # game values and bringing the user back to the first scenario (gameState 0)
         if gameStateNum == 99:
             gameStateNum = 0
             PlayerValues.reset()
         else:
             gameStateNum += 1
 
+        # Update all game values
         updateGameValues()
 
     # The method for the second choice button. This method will check which gameState the user is in
@@ -551,7 +573,8 @@ def main():
         global gameStateNum
         global consequence
 
-        # Check which scenario the user was in when they clicked the button
+        # Check which scenario the user was in when they clicked the button and give them the corresponding
+        # consequence to display and update their player values.
         if gameStateNum == 0:
             consequence = "You find some food for your squad. You eat your portion. +1 HP"
             PlayerValues.unlockFood()
@@ -572,10 +595,11 @@ def main():
             consequence = "You escape with minor injuries but it's only a matter of time before they find you. -1 HP"
             PlayerValues.changeHealth(-1)
 
+        # Iterate the gameState
         gameStateNum += 1
-        updateGameValues()
 
-        # what did you find
+        # Update all game values
+        updateGameValues()
 
     # The method for the third choice button. This method will check which gameState the user is in
     # and react accordingly.
@@ -583,7 +607,8 @@ def main():
         global gameStateNum
         global consequence
 
-        # Check which scenario the user was in when they clicked the button
+        # Check which scenario the user was in when they clicked the button and give them the corresponding
+        # consequence to display and update their player values.
         if gameStateNum == 0:
             consequence = "You trip on a wire and you are injured by a trap in the wall. 'ITS A TRAP! AAGH' -1 HP"
             PlayerValues.changeHealth(-1)
@@ -604,7 +629,10 @@ def main():
             consequence = "You cannot unlock the escape hatch, oh no the enemy sees you. Enjoy prison!"
             PlayerValues.die()
 
+        # Iterate the gameState
         gameStateNum += 1
+
+        # Update all game values
         updateGameValues()
 
     # The method for the fourth choice button. This method will check which gameState the user is in
@@ -613,7 +641,8 @@ def main():
         global gameStateNum
         global consequence
 
-        # Check which scenario the user was in when they clicked the button
+        # Check which scenario the user was in when they clicked the button and give them the corresponding
+        # consequence to display and update their player values.
         if gameStateNum == 0:
             consequence = "You get hit by a motar round. Your bits fly everywhere."
 
@@ -628,12 +657,15 @@ def main():
 
         gameStateNum += 1
 
+        # Since this is the button that causes death, the user always dies after clicking it.
         PlayerValues.die()
 
+        # Update all game values
         updateGameValues()
 
 
-    # Placing screen elements
+    # This set of statements initializes and places the main background screen elements that the other elements
+    # will be placed on.
     canvas = tk.Canvas(root, height=700, width=700, bg="#f0f0f0")
     canvas.pack()
 
@@ -653,6 +685,7 @@ def main():
     if gameStateNum == 99:
         centerMessage = 'Press "Start" to start! (Press smalled Button)'
 
+        # Initialize the GUI element with the height, width, and text set.
         centerTextBox = Label(
             root,
             height=100,
@@ -661,10 +694,10 @@ def main():
             pady=10,
             text=centerMessage
         )
-
-        # centerTextBox.
+        # Place the GUI element on the screen
         centerTextBox.place(relwidth=0.8, relheight=0.5, relx=0.0959, rely=0.095)
 
+        # Initialize the GUI element with the height, width, and text set.
         result = Label(
             root,
             height=10,
@@ -674,9 +707,10 @@ def main():
             text=""
         )
 
-        # centerTextBox.
+        # Place the GUI element on the screen
         result.place(relwidth=0.7, relheight=0.05, relx=0.5, rely=0.2, anchor=CENTER)
 
+        # Initialize the GUI element with the height, width, and text set.
         health = Label(
             root,
             height=10,
@@ -686,12 +720,13 @@ def main():
             text="Health: " + str(PlayerValues.getHealth())
         )
 
-        # centerTextBox.
+        # Place the GUI element on the screen
         health.place(relwidth=0.1, relheight=0.05, relx=0.1, rely=0.1)
 
         global collectiblesList
         collectiblesList = ""
 
+        # Initialize the GUI element with the height, width, and text set.
         collectibles = Label(
             root,
             text=collectiblesList,
@@ -699,13 +734,15 @@ def main():
             anchor='n'
         )
 
-        # centerTextBox.
+        # Place the GUI element on the screen
         collectibles.place(relwidth=0.1, relheight=0.076, relx=0.1, rely=0.51)
 
         buttonWidth = 80
 
         posy_choices = [0.69, 0.76, 0.83, 0.90]
 
+        # Initialize all GUI buttons with the height, width, text, and command method (what will result upon
+        # clicking the button) set.
         choice1msg = "Start"
         choice1Button = tk.Button(root,
                                   text=choice1msg,
@@ -750,7 +787,6 @@ def main():
                                   command=choice4)
         choice4Button.place(relx=0.5, rely=posy_choices[3], anchor=CENTER)
 
-        #"Pause (Press the small button)"
         pausemsg = ""
         pauseButton = tk.Button(root,
                                 text=pausemsg,
