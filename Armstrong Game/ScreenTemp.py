@@ -202,7 +202,7 @@ def main():
 
     # This method is the handler utilized to light up the on board LCD bulbs based on numberOfCollected's value. Although logically, a player should not be able to collect
     # more then 4 collectibles at a time, the method still checks for a max limit of 4 when being utilized. This is done in order to stop the program from hitting a null pointer error
-    # when it tries to light up a 5th bulb that does not exist. 
+    # when it tries to light up a 5th bulb that does not exist.
     def checkLights(numberOfCollected):
         for x in range(0, numberOfCollected):
             if x == 4:
@@ -312,6 +312,9 @@ def main():
         # This is a running total value that tracks how many collectibles the player has and is recalculated everytime a updateGameValues method is called.
         numberOfCollected = 0
 
+        # Although there are more efficent methods of doing this, the idea is that the program is checking everytime the game updates, whether the player has specific
+        # collectibles, and if so it adds +1 to the numberOfCollected variable. And in cases such as hasBandages, it will also change the outcome concerning if
+        # the player saved their squad or not.
         if PlayerValues.hasBandages():
             numberOfCollected += 1
             squad = "You saved your squad!!!"
@@ -334,23 +337,30 @@ def main():
         if PlayerValues.hasKey():
             numberOfCollected += 1
 
+        # Once collectibles have been checked, the final numberOfCollected value is sent to the checkLights method to turn on the appropriate
+        # amount of the LCD Bulbs based on the value.
         checkLights(numberOfCollected)
 
-
+        # This if statement checks if the player has died within the game due to a consequence. If this does occur,
+        # the game will then reset the player's values, as well as prepare the game's end screen value.
         if PlayerValues.isDead():
-            PlayerValues.setEndTime(time.time())
+            PlayerValues.setEndTime(time.time()) #This setEndTime method simply records the exact clock time the player finished, this can either be from game death or escape
 
-            pausedTime = 0
-            phealth = len(PlayerValues.getHealth())
-            gameState = gameStateList[5]
+            pausedTime = 0 # Pause time is set to 0 for the next game
+            phealth = len(PlayerValues.getHealth()) # Player total health is calculated
+            gameState = gameStateList[5] # Gamestate is updated to death state
 
-            GameTime = PlayerValues.getEndTime()
+            GameTime = PlayerValues.getEndTime() # Total time is retrieved from the player's earlier set end time
             MinuteTime = 0
             SecondTime = GameTime
 
+            # This if statement formats out the game time into minutes and seconds
             if GameTime >= 60:
                 MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
+            # This group of statements handles the string text that will be sent for the player to view at the end of the game after a player death.
+            # It will update the choices based on the current gameState, update the LCD's text and push a string message into the message varibles
+            # that will be outputted in the end screen.
             message = f'\nYou had {phealth:.0f} hearts remaining\nYou got {numberOfCollected:.0f} collectibles\n' + squad + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
             firstChoice = gameState.getChoice1()
             secondChoice = gameState.getChoice2()
@@ -359,20 +369,25 @@ def main():
             lcdmessages = "YOU DIED!!!"
 
         else:
+            # If the player did not die, but the gameState was updated to 5. This means they have finished the game and received one of the multiple endings.
             if gameStateNum == 5:
-                PlayerValues.setEndTime(time.time())
+                PlayerValues.setEndTime(time.time()) #This setEndTime method simply records the exact clock time the player finished
 
-                pausedTime = 0
-                phealth = len(PlayerValues.getHealth())
-                gameState = gameStateList[5]
+                pausedTime = 0  # Pause time is set to 0 for the next game
+                phealth = len(PlayerValues.getHealth())  # Player total health is calculated
+                gameState = gameStateList[5]  # Gamestate is updated to death state
 
-                GameTime = PlayerValues.getEndTime()
+                GameTime = PlayerValues.getEndTime()  # Total time is retrieved from the player's earlier set end time
                 MinuteTime = 0
                 SecondTime = GameTime
 
+                # This if statement formats out the game time into minutes and seconds
                 if GameTime >= 60:
                     MinuteTime, SecondTime = (GameTime // 60, GameTime % 60)
 
+                # This group of statements handles the string text that will be sent for the player to view at the end of the game.
+                # It will update the choices based on the current gameState, update the LCD's text and push a string message into the message varibles
+                # that will be outputted in the end screen.
                 message = m + f'\nYou had {phealth:.0f} hearts remaining\nYou got {numberOfCollected:.0f} collectibles\n' + squad + f"\nTotal Run Time: {MinuteTime:.0f} minutes {SecondTime:.0f} seconds"
                 firstChoice = gameState.getChoice1()
                 secondChoice = gameState.getChoice2()
@@ -380,9 +395,12 @@ def main():
                 deathChoice = gameState.getChoiceDeath()
                 lcdmessages = "You escaped!!!"
             else:
+                # If the player has not escaped or died, the game will simply update the next screen's options and push the next gameState values onto
+                # the GUI.
                 print(gameStateNum)
-                gameState = gameStateList[gameStateNum]
+                gameState = gameStateList[gameStateNum] # New gameState is retrieved
 
+                # Main text box values and game option values are updated based on the new gameState
                 message = gameState.getMessage()
                 firstChoice = gameState.getChoice1()
                 secondChoice = gameState.getChoice2()
