@@ -1,3 +1,5 @@
+# This class is simply a container for all of the GameState objects to store their preset information.
+# This class only stores string text concerning a gamestate's 4 choices and main menu text message.
 class GameState:
     def __init__(self, message, choice1, choice2, choice3, choiceDeath):
         self.__choiceDeath = choiceDeath
