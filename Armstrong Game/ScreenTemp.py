@@ -34,8 +34,12 @@ global PlayerValues
 global StartTime
 PlayerValues = PlayerValues()
 
-BlueLights = LEDBoard(23, 25, 13, 26)
+# initialization of each reference for each of the GPIO functions except for the LCD screen
 
+# The statement below maps GPIO pins 23, 25, 13, 26 to the LED Board Object referenced to as BlueLights
+BlueLights = LEDBoard(23, 25, 13, 26)
+# This group of statements sets the GPIO library object to GPIO.BCM mode and individually maps each
+# GPIO pin connection to the GPIO object for association.
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN)
 GPIO.setup(22, GPIO.IN)
@@ -816,12 +820,13 @@ def main():
     GPIO.add_event_detect(24, GPIO.RISING, callback=relayToTkinterB, bouncetime=300) # Blue Button
     GPIO.add_event_detect(16, GPIO.RISING, callback=relayToTkinterS, bouncetime=300) # Small Button
 
-    # 
-    root.bind('<<yellow>>', choice1)
-    root.bind('<<red>>', choice2)
-    root.bind('<<green>>', choice3)
-    root.bind('<<blue>>', choice4)
-    root.bind('<<small>>', keydown)
+    # These statements handle binding the specific virtual events, that are directed from the relay methods, to the
+    # choice functions which will update game values when initialized.
+    root.bind('<<yellow>>', choice1) # Yellow event to Choice 1
+    root.bind('<<red>>', choice2) # Red event to Choice 2
+    root.bind('<<green>>', choice3) # Green event to Choice 3
+    root.bind('<<blue>>', choice4) # Blue event to Choice 4
+    root.bind('<<small>>', keydown) # Small event to Keydown method
 
     tick()
 
