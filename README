@@ -1,5 +1,3 @@
-https://www.youtube.com/watch?v=Yb6dZ1IFlKc
-
-I hate you
-
-Version 0.0.1 (Pre-Alpha)
+This is a text based adventure game that has multiple endings based on which choices you make throughout the game. 
+We have implemented it in Python utilizing Tkinter for its GUI framework.
+We created a custom breadboard controller that handled player input and had leds that reflected ingame info.
